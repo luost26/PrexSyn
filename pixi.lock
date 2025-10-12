@@ -2239,7 +2239,7 @@ packages:
 - pypi: ./
   name: prexsyn
   version: 0.1.0
-  sha256: bc122cb7a2403dda9ec5bec60c81dc44a54061546217f45cc4a766477d20c745
+  sha256: fbdeb9b521aebf344140e6c27d95b3789e66de10a1b88ce3d32cdf09e5ab4875
   requires_dist:
   - click>=8.3.0,<9
   - hydra-core>=1.3.2,<2
@@ -2251,7 +2251,6 @@ packages:
   - omegaconf>=2.3.0,<3
   - pandas>=2.3.3,<3
   - pydot>=4.0.1,<5
-  - rdkit>=2025.3.6
   - rich>=14.2.0,<15
   - scikit-learn>=1.7.2,<2
   - seaborn>=0.13.2,<0.14

@@ -16,7 +16,6 @@ dependencies = [
   "omegaconf>=2.3.0,<3",
   "pandas>=2.3.3,<3",
   "pydot>=4.0.1,<5",
-  "rdkit>=2025.3.6",
   "rich>=14.2.0,<15",
   "scikit-learn>=1.7.2,<2",
   "seaborn>=0.13.2,<0.14",
@@ -85,4 +84,5 @@ dev = { features = ["dev"], solve-group = "default" }
 
 [tool.pixi.dependencies]
 python = ">=3.13.0,<3.14"
+rdkit = ">=2025.3.6"
 prexsyn-engine = { url = "file:///mnt/home/luost/ws/output/linux-64/prexsyn-engine-0.1.0-py313hf70daa8_0.conda" }
