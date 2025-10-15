@@ -95,6 +95,10 @@ class RDKitDescriptors(BasePropertyDef):
         self._name = name
         self._num_evaluated_descriptors = num_evaluated_descriptors
 
+    @property
+    def name(self) -> str:
+        return self._name
+
     def get_featurizer(self) -> RDKitDescriptorsFeaturizer:
         return RDKitDescriptorsFeaturizer(
             name=self._name,
@@ -143,6 +147,10 @@ class RDKitDescriptorUpperBounds(BasePropertyDef):
     def __init__(self, name: str = "rdkit_descriptor_upper_bounds") -> None:
         super().__init__()
         self._name = name
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     def get_featurizer(self) -> RDKitDescriptorsFeaturizer:
         return RDKitDescriptorsFeaturizer(name=self._name, num_evaluated_descriptors=1)

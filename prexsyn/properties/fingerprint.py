@@ -38,12 +38,12 @@ class StandardFingerprintProperty(BasePropertyDef, abc.ABC):
         self._name = name
         self._num_embedding_tokens = num_embedding_tokens
 
-    @abc.abstractmethod
     @property
+    @abc.abstractmethod
     def fp_type(self) -> str: ...
 
-    @abc.abstractmethod
     @property
+    @abc.abstractmethod
     def fp_dim(self) -> int: ...
 
     @property
