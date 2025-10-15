@@ -2934,7 +2934,7 @@ packages:
 - pypi: ./
   name: prexsyn
   version: 0.1.0
-  sha256: ab43b1a66703a9bd8137d918fcd77ab979b401f32be3e6b0d77c814eab6cc511
+  sha256: 28a7733edbe2ff8c48cd8bb0e1957539abdb6c1d93756913872a0909352eaee8
   requires_dist:
   - click>=8.3.0,<9
   - hydra-core>=1.3.2,<2
