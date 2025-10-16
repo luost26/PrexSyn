@@ -1,5 +1,5 @@
 from collections.abc import Callable, Mapping, Sequence
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import torch
 from torch import nn
@@ -99,6 +99,15 @@ class PrexSyn(nn.Module):
 
     def predict(self, h_syn: torch.Tensor) -> Prediction:
         return self.synthesis_output.predict(h_syn)
+
+    if TYPE_CHECKING:
+
+        def __call__(
+            self,
+            property_repr: PropertyRepr,
+            synthesis_repr: SynthesisRepr,
+            data_weights: torch.Tensor | None = None,
+        ) -> dict[str, torch.Tensor]: ...
 
     def forward(
         self,
