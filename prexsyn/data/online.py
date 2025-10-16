@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from rdkit import RDLogger
 
-from prexsyn.chemspace import ChemicalSpace
+from prexsyn.chemical_space import ChemicalSpace
 from prexsyn.properties import PropertySet
 from prexsyn_engine.chemspace import SynthesisGeneratorOption
 from prexsyn_engine.featurizer.synthesis import PostfixNotationFeaturizer
