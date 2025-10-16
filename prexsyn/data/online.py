@@ -5,9 +5,9 @@ import numpy as np
 import torch
 from rdkit import RDLogger
 
-from prexsyn.chemical_space import ChemicalSpace
-from prexsyn.properties import PropertySet
-from prexsyn.tokenization import Tokenization
+from prexsyn.factories.chemical_space import ChemicalSpace
+from prexsyn.factories.property import PropertySet
+from prexsyn.factories.tokenization import Tokenization
 from prexsyn_engine.chemspace import SynthesisGeneratorOption
 from prexsyn_engine.featurizer.synthesis import PostfixNotationFeaturizer
 from prexsyn_engine.pipeline import DataPipelineV2
