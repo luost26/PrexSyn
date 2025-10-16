@@ -5,10 +5,11 @@ import torch
 from rdkit import Chem
 from torch import nn
 
+from prexsyn.models.embeddings import BasePropertyEmbedder, Embedding
 from prexsyn_engine.featurizer.fingerprint import FingerprintFeaturizer
 from prexsyn_engine.fingerprints import get_fingerprints
 
-from .base import BasePropertyDef, BasePropertyEmbedder, PropertyEmbedding
+from .base import BasePropertyDef
 
 
 class FingerprintEmbedder(BasePropertyEmbedder, nn.Module):
@@ -23,12 +24,12 @@ class FingerprintEmbedder(BasePropertyEmbedder, nn.Module):
             nn.Linear(embedding_dim, embedding_dim * num_tokens),
         )
 
-    def forward(self, fingerprint: torch.Tensor) -> PropertyEmbedding:
+    def forward(self, fingerprint: torch.Tensor) -> Embedding:
         h = self.mlp(fingerprint)
         h = h.reshape(*h.shape[:-1], self.num_tokens, -1)
-        return PropertyEmbedding(
+        return Embedding(
             embedding=h,
-            padding_mask=PropertyEmbedding.create_full_padding_mask(h),
+            padding_mask=Embedding.create_full_padding_mask(h),
         )
 
 

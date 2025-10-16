@@ -7,6 +7,7 @@ from rdkit import RDLogger
 
 from prexsyn.chemical_space import ChemicalSpace
 from prexsyn.properties import PropertySet
+from prexsyn.tokenization import Tokenization
 from prexsyn_engine.chemspace import SynthesisGeneratorOption
 from prexsyn_engine.featurizer.synthesis import PostfixNotationFeaturizer
 from prexsyn_engine.pipeline import DataPipelineV2
@@ -19,6 +20,7 @@ class OnlineSynthesisDataset:
         self,
         chemspace: ChemicalSpace,
         property_set: PropertySet,
+        tokenization: Tokenization,
         batch_size: int = 128,
         num_threads: int = 16,
         virtual_length: int = 1000,
@@ -27,6 +29,8 @@ class OnlineSynthesisDataset:
         super().__init__()
         self.chemspace = chemspace
         self.property_set = property_set
+        self.tokenization = tokenization
+
         self.batch_size = batch_size
         self.num_threads = num_threads
         self.virtual_length = virtual_length
@@ -52,7 +56,7 @@ class OnlineSynthesisDataset:
             end = (i + 1) * subbatch_size if i < num_properties - 1 else self.batch_size
             self._property_names_and_slices.append((prop_name, slice(start, end)))
 
-        self._featurizer_set.add(PostfixNotationFeaturizer())
+        self._featurizer_set.add(PostfixNotationFeaturizer(token_def=self.tokenization.token_def))
 
         self._pipeline = DataPipelineV2(
             num_threads=self.num_threads,
@@ -72,12 +76,6 @@ class OnlineSynthesisDataset:
             raise IndexError("Index out of range")
 
         data = self.pipeline.get(self.batch_size)
-        out: SynthesisTrainingBatch = {
-            "token_types": torch.from_numpy(data["synthesis.token_types"]),
-            "bb_indices": torch.from_numpy(data["synthesis.bb_indices"]),
-            "rxn_indices": torch.from_numpy(data["synthesis.rxn_indices"]),
-            "property_repr": [],
-        }
 
         grouped: dict[str, dict[str, np.ndarray[Any, Any]]] = {}
         for key, value in data.items():
@@ -96,5 +94,13 @@ class OnlineSynthesisDataset:
                     }
                 }
             )
-        out["property_repr"] = property_repr
+
+        out: SynthesisTrainingBatch = {
+            "synthesis_repr": {
+                "token_types": torch.from_numpy(data["synthesis.token_types"]),
+                "bb_indices": torch.from_numpy(data["synthesis.bb_indices"]),
+                "rxn_indices": torch.from_numpy(data["synthesis.rxn_indices"]),
+            },
+            "property_repr": property_repr,
+        }
         return out

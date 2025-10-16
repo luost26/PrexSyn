@@ -4,9 +4,10 @@ import torch
 from rdkit import Chem
 from torch import nn
 
+from prexsyn.models.embeddings import BasePropertyEmbedder, Embedding
 from prexsyn_engine.featurizer.rdkit_descriptors import RDKitDescriptorsFeaturizer
 
-from .base import BasePropertyDef, BasePropertyEmbedder, PropertyEmbedding
+from .base import BasePropertyDef
 
 
 class ScalarPropertySetEmbedder(BasePropertyEmbedder):
@@ -29,7 +30,7 @@ class ScalarPropertySetEmbedder(BasePropertyEmbedder):
             nn.Linear(embedding_dim, embedding_dim),
         )
 
-    def forward(self, values: torch.Tensor, types: torch.Tensor) -> PropertyEmbedding:
+    def forward(self, values: torch.Tensor, types: torch.Tensor) -> Embedding:
         value_embeddings = self.value_mlp(values[..., None])
         type_embeddings = self.type_embedding(types)
         combined = value_embeddings * type_embeddings
@@ -41,7 +42,7 @@ class ScalarPropertySetEmbedder(BasePropertyEmbedder):
             p = torch.rand_like(m)
             m.masked_fill_(p < self.prop_dropout, float("-inf"))
 
-        return PropertyEmbedding(h, m)
+        return Embedding(h, m)
 
 
 class ScalarPropertyUpperBoundEmbedder(BasePropertyEmbedder):
@@ -70,7 +71,7 @@ class ScalarPropertyUpperBoundEmbedder(BasePropertyEmbedder):
         upper_bound = values + r * (self.observed_max_values[types] - values).clamp_min(0)
         return upper_bound
 
-    def forward(self, values: torch.Tensor, types: torch.Tensor) -> PropertyEmbedding:
+    def forward(self, values: torch.Tensor, types: torch.Tensor) -> Embedding:
         if values.size(-1) != 1 or types.size(-1) != 1:
             raise ValueError("values and types must have shape (..., 1), only single property supported.")
 
@@ -86,7 +87,7 @@ class ScalarPropertyUpperBoundEmbedder(BasePropertyEmbedder):
         m = torch.full(h.shape[:-1], fill_value=float("-inf"), dtype=h.dtype, device=h.device)
         m.masked_fill_(types.expand(h.shape[:-1]) != 0, 0.0)
 
-        return PropertyEmbedding(h, m)
+        return Embedding(h, m)
 
 
 class RDKitDescriptors(BasePropertyDef):
