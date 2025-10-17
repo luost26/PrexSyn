@@ -1,7 +1,6 @@
 import torch
 
 from prexsyn.data.struct import PropertyRepr, SynthesisRepr
-from prexsyn.models.outputs.synthesis import Prediction
 from prexsyn.models.prexsyn import PrexSyn
 from prexsyn_engine.featurizer.synthesis import PostfixNotationTokenDef
 
@@ -37,25 +36,26 @@ class BasicSampler:
             end_token=self.token_def.END,
         )
 
-    def _sample_from_logits(self, prediction: Prediction, ended: torch.Tensor) -> dict[str, torch.Tensor]:
-        batch_shape = prediction.type_logits.shape[:-1]
+    def _predict_and_sample(self, h_next: torch.Tensor, ended: torch.Tensor) -> dict[str, torch.Tensor]:
+        batch_shape = h_next.shape[:-1]
+        h_next = h_next.flatten(0, -2)
         ended = ended.flatten()
 
-        type_logits = prediction.type_logits.flatten(0, -2) / self.t_types
+        type_logits = self.model.predict_token_type(h_next) / self.t_types
         next_type = torch.multinomial(torch.softmax(type_logits, dim=-1), num_samples=1).squeeze(-1)
         next_type = torch.where(ended, self.token_def.PAD, next_type)
 
         next_bb = torch.zeros_like(next_type)
         bb_pos = (next_type == self.token_def.BB).nonzero(as_tuple=True)[0]
         if bb_pos.numel() > 0:
-            bb_logits = prediction.bb_logits.flatten(0, -2)[bb_pos] / self.t_bb
+            bb_logits = self.model.predict_building_block(h_next[bb_pos]) / self.t_bb
             next_bb_subset = torch.multinomial(torch.softmax(bb_logits, dim=-1), num_samples=1).squeeze(-1)
             next_bb[bb_pos] = next_bb_subset
 
         next_rxn = torch.zeros_like(next_type)
         rxn_pos = (next_type == self.token_def.RXN).nonzero(as_tuple=True)[0]
         if rxn_pos.numel() > 0:
-            rxn_logits = prediction.rxn_logits.flatten(0, -2)[rxn_pos] / self.t_rxn
+            rxn_logits = self.model.predict_reaction(h_next[rxn_pos]) / self.t_rxn
             next_rxn_subset = torch.multinomial(torch.softmax(rxn_logits, dim=-1), num_samples=1).squeeze(-1)
             next_rxn[rxn_pos] = next_rxn_subset
 
@@ -74,7 +74,6 @@ class BasicSampler:
                 e_synthesis = self.model.embed_synthesis(builder.get())
                 h_syn = self.model.encode(e_property, e_synthesis)
 
-                prediction = self.model.predict(h_syn[..., -1:, :])
-                next = self._sample_from_logits(prediction, ended=builder.ended)
+                next = self._predict_and_sample(h_syn[..., -1:, :], builder.ended)
                 builder.append(**next)
         return builder.get()

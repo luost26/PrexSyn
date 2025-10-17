@@ -104,6 +104,15 @@ class PrexSyn(nn.Module):
     def predict(self, h_syn: torch.Tensor) -> Prediction:
         return self.synthesis_output.predict(h_syn)
 
+    def predict_token_type(self, h_syn: torch.Tensor) -> torch.Tensor:
+        return cast(torch.Tensor, self.synthesis_output.token_head(h_syn))
+
+    def predict_building_block(self, h_syn: torch.Tensor) -> torch.Tensor:
+        return cast(torch.Tensor, self.synthesis_output.bb_head(h_syn))
+
+    def predict_reaction(self, h_syn: torch.Tensor) -> torch.Tensor:
+        return cast(torch.Tensor, self.synthesis_output.rxn_head(h_syn))
+
     if TYPE_CHECKING:
 
         def __call__(
