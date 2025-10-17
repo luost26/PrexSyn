@@ -1,5 +1,7 @@
 from omegaconf import DictConfig
 
+from prexsyn_engine.detokenizer import Detokenizer
+
 from .chemical_space import ChemicalSpace
 from .property import PropertySet
 from .tokenization import Tokenization
@@ -23,3 +25,11 @@ class Facade:
     @property
     def tokenization(self) -> Tokenization:
         return self._tokenization
+
+    def get_detokenizer(self) -> Detokenizer:
+        csd = self.chemical_space.get_csd()
+        return Detokenizer(
+            building_blocks=csd.get_primary_building_blocks(),
+            reactions=csd.get_reactions(),
+            token_def=self.tokenization.token_def,
+        )
