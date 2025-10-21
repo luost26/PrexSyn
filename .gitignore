@@ -210,3 +210,4 @@ __marimo__/
 !.pixi/config.toml
 
 /logs*
+/notebooks
