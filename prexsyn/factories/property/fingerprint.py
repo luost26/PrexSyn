@@ -40,7 +40,10 @@ class FingerprintEmbedder(BasePropertyEmbedder, nn.Module):
 
 class FingerprintCondition(Condition):
     def __init__(
-        self, fingerprint: torch.Tensor, property_def: "StandardFingerprintProperty", weight: float = 1.0
+        self,
+        fingerprint: torch.Tensor,
+        property_def: "StandardFingerprintProperty",
+        weight: float = 1.0,
     ) -> None:
         super().__init__(weight=weight)
         if not (fingerprint.ndim == 2 and fingerprint.shape[0] == 1):
@@ -60,6 +63,9 @@ class FingerprintCondition(Condition):
         if union == 0:
             return 1.0
         return float(intersection / union)
+
+    def __repr__(self) -> str:
+        return f"{self._property_def.name}={self.fingerprint[0].nonzero(as_tuple=True)[0]}"
 
 
 class StandardFingerprintProperty(BasePropertyDef, abc.ABC):
@@ -94,7 +100,11 @@ class StandardFingerprintProperty(BasePropertyDef, abc.ABC):
         mol = [mol] if isinstance(mol, Chem.Mol) else mol
         return {"fingerprint": torch.from_numpy(get_fingerprints(mol, fp_type=self.fp_type))}
 
-    def eq(self, mol: Chem.Mol | np.ndarray[tuple[int], np.dtype[Any]] | torch.Tensor) -> FingerprintCondition:
+    def eq(
+        self,
+        mol: Chem.Mol | np.ndarray[tuple[int], np.dtype[Any]] | torch.Tensor,
+        weight: float = 1.0,
+    ) -> FingerprintCondition:
         if isinstance(mol, Chem.Mol):
             fp_tensor = self.evaluate_mol(mol)["fingerprint"]
         elif isinstance(mol, np.ndarray):
@@ -102,7 +112,7 @@ class StandardFingerprintProperty(BasePropertyDef, abc.ABC):
         elif isinstance(mol, torch.Tensor):
             fp_tensor = mol
         fp_tensor = fp_tensor.view(1, self.fp_dim)
-        return FingerprintCondition(fingerprint=fp_tensor, property_def=self)
+        return FingerprintCondition(fingerprint=fp_tensor, property_def=self, weight=weight)
 
 
 class ECFP4(StandardFingerprintProperty):
