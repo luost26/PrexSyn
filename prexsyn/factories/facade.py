@@ -4,10 +4,10 @@ import torch
 from omegaconf import DictConfig, OmegaConf
 
 from prexsyn.models.prexsyn import PrexSyn
+from prexsyn.properties import PropertySet
 from prexsyn_engine.detokenizer import Detokenizer
 
 from .chemical_space import ChemicalSpace
-from .property import PropertySet
 from .tokenization import Tokenization
 
 

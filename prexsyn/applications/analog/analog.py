@@ -3,8 +3,8 @@ import time
 from rdkit import Chem
 
 from prexsyn.data.struct import move_to_device
-from prexsyn.factories.property import BasePropertyDef
 from prexsyn.models.prexsyn import PrexSyn
+from prexsyn.properties import BasePropertyDef
 from prexsyn.samplers.basic import BasicSampler
 from prexsyn_engine.detokenizer import Detokenizer
 from prexsyn_engine.fingerprints import mol_to_syntheses_tanimoto_similarity
