@@ -114,7 +114,7 @@ class RDKitDescriptorsCondition(Condition):
             values.append(v)
 
         self.type_names = type_names
-        types = [property_def.available_descriptors.index(name) for name in type_names]
+        types = [property_def.available_descriptors[name] for name in type_names]
         self.types = torch.tensor(types, dtype=torch.long).unsqueeze(0)
         self.values = torch.tensor(values, dtype=torch.float).unsqueeze(0)
 
@@ -162,8 +162,8 @@ class RDKitDescriptors(BasePropertyDef):
         )
 
     @property
-    def available_descriptors(self) -> list[str]:
-        return list(self.get_featurizer().descriptor_names)
+    def available_descriptors(self) -> dict[str, int]:
+        return {name: i + 1 for i, name in enumerate(self.get_featurizer().descriptor_names)}
 
     def evaluate_single_mol(self, mol: Chem.Mol) -> tuple[torch.Tensor, torch.Tensor]:
         from rdkit.Chem.rdMolDescriptors import Properties
@@ -171,7 +171,7 @@ class RDKitDescriptors(BasePropertyDef):
         types: list[int] = []
         values: list[float] = []
 
-        for i, desc_name in enumerate(self.available_descriptors, start=1):
+        for desc_name, i in self.available_descriptors.items():
             types.append(i)
             values.append(Properties.GetProperty(desc_name)(mol))
 
@@ -208,7 +208,7 @@ class RDKitDescriptorUpperBoundCondition(Condition):
         if name not in property_def.available_descriptors:
             raise ValueError(f"Descriptor '{name}' is not available in RDKitDescriptors.")
         self.name = name
-        self.type = torch.tensor([[property_def.available_descriptors.index(name)]], dtype=torch.long)
+        self.type = torch.tensor([[property_def.available_descriptors[name]]], dtype=torch.long)
         self.upper_bound = torch.tensor([[upper_bound]], dtype=torch.float)
 
     def get_property_repr(self) -> PropertyRepr:
@@ -235,8 +235,8 @@ class RDKitDescriptorUpperBound(BasePropertyDef):
         return RDKitDescriptorsFeaturizer(name=self._name, num_evaluated_descriptors=1)
 
     @property
-    def available_descriptors(self) -> list[str]:
-        return list(self.get_featurizer().descriptor_names)
+    def available_descriptors(self) -> dict[str, int]:
+        return {name: i + 1 for i, name in enumerate(self.get_featurizer().descriptor_names)}
 
     def get_embedder(self, model_dim: int) -> ScalarPropertyUpperBoundEmbedder:
         return ScalarPropertyUpperBoundEmbedder(
