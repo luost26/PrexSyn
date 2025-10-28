@@ -102,7 +102,7 @@ class QuerySampler:
             if builder.ended.all():
                 break
 
-        return builder.get()
+        return builder.get(self.max_length)
 
     @torch.no_grad()
     def sample(self, query: Query) -> SynthesisRepr:

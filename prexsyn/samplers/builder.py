@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, cast
 
 import torch
 
@@ -37,9 +37,16 @@ class SynthesisReprBuilder:
         self.ended = torch.logical_or(self.ended, (token_types == self.end_token).any(dim=-1))
         return self
 
-    def get(self) -> SynthesisRepr:
-        return {
+    def get(self, fix_length: int | None = None) -> SynthesisRepr:
+        out = {
             "token_types": self.token_types,
             "bb_indices": self.bb_indices,
             "rxn_indices": self.rxn_indices,
         }
+        if fix_length is not None:
+            if fix_length < out["token_types"].size(1):
+                out = {k: v[:, :fix_length] for k, v in out.items()}
+            elif fix_length > out["token_types"].size(1):
+                pad_size = fix_length - out["token_types"].size(1)
+                out = {k: torch.nn.functional.pad(v, (0, pad_size), value=0) for k, v in out.items()}
+        return cast(SynthesisRepr, out)
