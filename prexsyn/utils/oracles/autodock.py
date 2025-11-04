@@ -272,36 +272,6 @@ class autodock_gpu:
 
 
 @register
-class autodock_1iep(autodock_gpu):
-    def __init__(self) -> None:
-        super().__init__(
-            receptor_path="./data/docking/1iep/1iep_receptorH.pdb",
-            box_size=(20.0, 20.0, 20.0),
-            box_center=(15.190, 53.903, 16.917),
-        )
-
-
-@register
-class autodock_CDK6_2euf(autodock_gpu):
-    def __init__(self) -> None:
-        super().__init__(
-            receptor_path="./data/docking/2euf/2euf_atomH.pdb",
-            box_size=(20.0, 20.0, 20.0),
-            box_center=(29.0, 21.0, 60.0),
-        )
-
-
-@register
-class autodock_TGFb1_6b8y(autodock_gpu):
-    def __init__(self) -> None:
-        super().__init__(
-            receptor_path="./data/docking/6b8y/6b8y_atomH.pdb",
-            box_size=(20.0, 20.0, 20.0),
-            box_center=(5.0, 10.0, 5.0),
-        )
-
-
-@register
 class autodock_Mpro_7gaw(autodock_gpu):
     def __init__(self) -> None:
         super().__init__(
