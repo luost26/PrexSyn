@@ -11,3 +11,7 @@
 - class: prexsyn.properties.rdkit_descriptors.RDKitDescriptorUpperBound
   params:
     name: rdkit_descriptor_upper_bound
+- class: prexsyn.properties.brics.BRICSFragments
+  params:
+    name: brics
+    max_num_fragments: 8
