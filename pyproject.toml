@@ -110,6 +110,8 @@ clang-tools = "==21.1.0"
 llvm-tools = "==21.1.0"
 compiler-rt = "==21.1.0"
 gtest = ">=1.14.0,<2"
+ipykernel = "*"
+ipywidgets = "*"
 
 [tool.pixi.feature.dev-engine.tasks]
 install-engine = { cmd = "pip install ../prexsyn-engine" }
