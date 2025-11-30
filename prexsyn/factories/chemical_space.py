@@ -10,15 +10,24 @@ from prexsyn_engine.chemspace import (
 from prexsyn_engine.reaction_list import ReactionList
 
 
-class ChemicalSpace:
-    _data_files = (
-        "primary_building_blocks",
-        "primary_index",
-        "reactions",
-        "secondary_building_blocks",
-        "secondary_index",
-    )
+chemical_space_data_files = (
+    "primary_building_blocks",
+    "primary_index",
+    "reactions",
+    "secondary_building_blocks",
+    "secondary_index",
+)
 
+
+def check_chemical_space_data_dir(data_dir: str | pathlib.Path) -> bool:
+    data_dir = pathlib.Path(data_dir)
+    for file in chemical_space_data_files:
+        if not (data_dir / file).exists():
+            return False
+    return True
+
+
+class ChemicalSpace:
     def __init__(self, data_dir: str | pathlib.Path) -> None:
         super().__init__()
         self._data_dir = pathlib.Path(data_dir)
@@ -26,12 +35,7 @@ class ChemicalSpace:
         self.check_files()
 
     def check_files(self) -> None:
-        for file in self._data_files:
-            if not (self._data_dir / file).exists():
-                raise FileNotFoundError(
-                    f"Required data file '{file}' not found in '{self._data_dir}'. "
-                    "Please remove the directory and re-generate the chemical space cache."
-                )
+        check_chemical_space_data_dir(self._data_dir)
 
     def __getstate__(self) -> dict[str, str]:
         return {"data_dir": self._data_dir.as_posix()}
@@ -51,7 +55,7 @@ class ChemicalSpace:
         building_block_path = pathlib.Path(building_block_path)
         reaction_path = pathlib.Path(reaction_path)
         cache_dir = pathlib.Path(cache_dir)
-        exists = list((cache_dir / file_name).exists() for file_name in cls._data_files)
+        exists = list((cache_dir / file_name).exists() for file_name in chemical_space_data_files)
 
         if not any(exists):
             csd = (
@@ -66,7 +70,9 @@ class ChemicalSpace:
             cache_dir.mkdir(parents=True, exist_ok=True)
             csd.save(str(cache_dir))
         elif not all(exists):
-            missing = [file_name for file_name, file_exists in zip(cls._data_files, exists) if not file_exists]
+            missing = [
+                file_name for file_name, file_exists in zip(chemical_space_data_files, exists) if not file_exists
+            ]
             raise FileNotFoundError(
                 f"Cache directory '{cache_dir}' is incomplete. Missing files: {', '.join(missing)}. "
                 "Please remove the directory and re-generate the chemical space cache."

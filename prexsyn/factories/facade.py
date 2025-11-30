@@ -77,17 +77,3 @@ class Facade:
         model = self.build_model()
         model.load_state_dict(state_dict)
         return model
-
-
-def load_model(path: pathlib.Path | str, train: bool = False) -> tuple[Facade, PrexSyn]:
-    path = pathlib.Path(path)
-    f_path = path.with_suffix(".yaml")
-    if not f_path.exists():
-        raise FileNotFoundError(f"Facade config file not found: {f_path}")
-    facade = Facade.from_file(f_path)
-    model = facade.load_model_from_checkpoint(path)
-    if train:
-        model.train()
-    else:
-        model.eval()
-    return facade, model

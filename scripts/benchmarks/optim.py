@@ -2,6 +2,7 @@ import heapq
 import logging
 import pathlib
 import sys
+from typing import cast
 
 import click
 import numpy as np
@@ -11,7 +12,8 @@ from rdkit import Chem
 
 from prexsyn.applications.optim import Optimizer
 from prexsyn.applications.optim.step import FingerprintGenetic, StepStrategy
-from prexsyn.factories.facade import Facade, load_model
+from prexsyn.factories import load_model
+from prexsyn.factories.facade import Facade
 from prexsyn.models.prexsyn import PrexSyn
 from prexsyn.properties import PropertySet
 from prexsyn.queries import Query
@@ -97,7 +99,7 @@ class Task:
             result_path = task_dir / f"run_{run_id:02d}.df.pkl"
             if result_path.exists():
                 logger.info(f"Skipping existing run: {result_path}")
-                df_result: pd.DataFrame = pd.read_pickle(result_path)
+                df_result = cast(pd.DataFrame, pd.read_pickle(result_path))
                 auc_top10 = auc_top10_from_df(df_result, self.max_evals)
             else:
                 optimizer = Optimizer(
@@ -135,7 +137,7 @@ class Task:
     "--model",
     "model_path",
     type=click.Path(exists=True, path_type=pathlib.Path),
-    default="./data/trained_models/v1_converted.ckpt",
+    default="./data/trained_models/v1_converted.yaml",
 )
 @click.option("--out", "output_dir", type=click.Path(path_type=pathlib.Path), default="./outputs/benchmarks/optim")
 @click.option("--time-limit", type=int, default=None)

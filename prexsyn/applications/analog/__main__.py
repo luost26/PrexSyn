@@ -7,7 +7,7 @@ import torch
 from rdkit import Chem
 from tqdm.auto import tqdm
 
-from prexsyn.factories.facade import load_model
+from prexsyn.factories import load_model
 from prexsyn.samplers.basic import BasicSampler
 
 from .analog import generate_analogs

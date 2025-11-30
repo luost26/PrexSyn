@@ -9,7 +9,8 @@ from rdkit import Chem
 from tqdm.auto import tqdm
 
 from prexsyn.applications.analog import AnalogGenerationDatabase, generate_analogs
-from prexsyn.factories.facade import Facade, load_model
+from prexsyn.factories import load_model
+from prexsyn.factories.facade import Facade
 from prexsyn.models.prexsyn import PrexSyn
 from prexsyn.samplers.basic import BasicSampler
 
@@ -86,7 +87,7 @@ def _run(
     "--model",
     "model_path",
     type=click.Path(exists=True, path_type=pathlib.Path),
-    default="./data/trained_models/v1_converted.ckpt",
+    default="./data/trained_models/v1_converted.yaml",
 )
 @click.option("--out", "output_dir", type=click.Path(path_type=pathlib.Path), default="./outputs/benchmarks/analog")
 @click.option("--num-runs", type=int, default=5)

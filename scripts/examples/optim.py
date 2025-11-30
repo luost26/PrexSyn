@@ -10,7 +10,7 @@ from rdkit.Chem import QED
 
 from prexsyn.applications.optim import Optimizer
 from prexsyn.applications.optim.step import FingerprintGenetic
-from prexsyn.factories.facade import load_model
+from prexsyn.factories import load_model
 from prexsyn.properties import PropertySet
 from prexsyn.queries import Query
 from prexsyn.utils.oracles import CustomOracle
@@ -43,7 +43,7 @@ def init_query_lipinski(ps: PropertySet, pn: str = "rdkit_descriptor_upper_bound
     "--model",
     "model_path",
     type=click.Path(exists=True, path_type=pathlib.Path),
-    default="./data/trained_models/v1_converted.ckpt",
+    default="./data/trained_models/v1_converted.yaml",
 )
 @click.option("--out", "output_dir", type=click.Path(path_type=pathlib.Path), default="./outputs/examples/optim")
 def main(

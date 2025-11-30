@@ -5,7 +5,7 @@ import torch
 from rdkit import Chem
 
 from prexsyn.applications.analog import generate_analogs
-from prexsyn.factories.facade import load_model
+from prexsyn.factories import load_model
 from prexsyn.samplers.basic import BasicSampler
 from prexsyn_engine.fingerprints import tanimoto_similarity
 
@@ -15,7 +15,7 @@ from prexsyn_engine.fingerprints import tanimoto_similarity
     "--model",
     "model_path",
     type=click.Path(exists=True, path_type=pathlib.Path),
-    default="./data/trained_models/v1_converted.ckpt",
+    default="./data/trained_models/v1_converted.yaml",
 )
 @click.option("--smiles", type=str, required=True)
 def main(

@@ -3,7 +3,7 @@ import pathlib
 import pickle
 import sys
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
@@ -12,7 +12,8 @@ from rdkit import Chem
 from rdkit.Chem import PandasTools
 from rdkit.Chem.AllChem import Compute2DCoords  # type: ignore[attr-defined]
 
-from prexsyn.factories.facade import Facade, load_model
+from prexsyn.factories import load_model
+from prexsyn.factories.facade import Facade
 from prexsyn.models.prexsyn import PrexSyn
 from prexsyn.properties import PropertySet
 from prexsyn.queries import Query
@@ -99,7 +100,7 @@ def save_results(df: pd.DataFrame, syn_list: Sequence[Synthesis], output_path: p
     df.to_pickle(output_path.with_suffix(".df.pkl"))
     df_top = df.head(500)
     df_top["product"].apply(Compute2DCoords)
-    df_top["product"].apply(PandasTools.PrintAsImageString)
+    df_top["product"].apply(PandasTools.PrintAsImageString)  # type: ignore
     df_top.to_html(output_path.with_suffix(".top500.html"), float_format="%.4f", escape=False)
 
 
@@ -136,7 +137,7 @@ def run_task(
         result_path = task_dir / f"run{i}"
         if result_path.with_suffix(".df.pkl").exists():
             logger.info(f"Run {i} already exists, loading results")
-            df = pd.read_pickle(result_path.with_suffix(".df.pkl"))
+            df = cast(pd.DataFrame, pd.read_pickle(result_path.with_suffix(".df.pkl")))
         else:
             logger.info(f"Running query benchmark, run {i}")
             df, syn_list = run_query(
