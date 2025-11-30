@@ -3,11 +3,12 @@ import pathlib
 import subprocess
 import tempfile
 import xml.etree.ElementTree
-from typing import overload
+from collections.abc import Iterable
+from typing import cast, overload
 
 import joblib
-import meeko
-import scrubber
+import meeko  # type: ignore
+import scrubber  # type: ignore
 from rdkit import Chem
 from rdkit.Chem.MolStandardize import rdMolStandardize
 
@@ -237,8 +238,11 @@ class autodock_gpu:
 
     def dock_multiple(self, mols: list[Chem.Mol], work_dir: str | pathlib.Path) -> list[AutoDockResult]:
         work_dir = pathlib.Path(work_dir).absolute()
-        nested_paths = joblib.Parallel(n_jobs=-1)(
-            joblib.delayed(self.prepare_ligand)(mol, f"{i}", work_dir) for i, mol in enumerate(mols)
+        nested_paths = cast(
+            Iterable[list[pathlib.Path]],
+            joblib.Parallel(n_jobs=-1)(
+                joblib.delayed(self.prepare_ligand)(mol, f"{i}", work_dir) for i, mol in enumerate(mols)
+            ),
         )
         ligand_paths: list[pathlib.Path] = []
         ligand_indices: list[int] = []

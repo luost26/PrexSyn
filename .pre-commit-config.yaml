@@ -9,7 +9,7 @@ repos:
     rev: v1.1.407
     hooks:
       - id: pyright
-        additional_dependencies: ["rdkit", "types-prexsyn-engine"]
+        additional_dependencies: ["rdkit-stubs", "types-prexsyn-engine", "sympy", "joblib", "lmdb", "numpy", "torch"]
   - repo: https://github.com/google/yamlfmt
     rev: v0.19.0
     hooks:

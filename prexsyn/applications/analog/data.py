@@ -82,7 +82,7 @@ class ResultDatabase(MutableMapping[str, _DataType]):
         self._keys_cache = set()
         with self.db.begin(write=False) as txn:
             for key_b in txn.cursor().iternext(values=False):
-                key = key_b.decode("utf-8")
+                key = cast(bytes, key_b).decode("utf-8")
                 if not key.startswith("_"):
                     self._keys_cache.add(key)
                     yield key

@@ -47,13 +47,14 @@ class State:
         return self.index_select(indices)
 
     def index_select(self, indices: torch.Tensor) -> "State":
+        indices_list: list[int] = indices.cpu().tolist()
         return State(
             coords=self.coords[indices],
             scores=self.scores[indices],
             constraint_scores=self.constraint_scores[indices],
             ages=self.ages[indices],
-            syntheses=[self.syntheses[i] for i in indices.cpu().tolist()],
-            products=[self.products[i] for i in indices.cpu().tolist()],
+            syntheses=[self.syntheses[i] for i in indices_list],
+            products=[self.products[i] for i in indices_list],
         )
 
     def topk(self, k: int) -> "State":

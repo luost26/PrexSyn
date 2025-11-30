@@ -1,7 +1,8 @@
 import abc
-from typing import TypeAlias
+from typing import TypeAlias, cast
 
 import sympy as sp
+import sympy.logic.boolalg
 from rdkit import Chem
 
 from prexsyn.data.struct import PropertyRepr
@@ -66,7 +67,7 @@ def _condition_to_symbol(condition: Condition, mapping: dict[Condition, sp.Symbo
     return sym
 
 
-def _node_to_sympy_expr(node: Node, mapping: dict[Condition, sp.Symbol]) -> sp.Expr:
+def _node_to_sympy_expr(node: Node, mapping: dict[Condition, sp.Symbol]) -> sympy.logic.boolalg.Boolean:
     if isinstance(node, Condition):
         return _condition_to_symbol(node, mapping)
     elif isinstance(node, And):
@@ -79,15 +80,17 @@ def _node_to_sympy_expr(node: Node, mapping: dict[Condition, sp.Symbol]) -> sp.E
         raise ValueError(f"Unknown node type: {type(node)}")
 
 
-def _sympy_expr_to_node(expr: sp.Expr, reverse_mapping: dict[sp.Symbol, Condition]) -> Node:
+def _sympy_expr_to_node(expr: sympy.logic.boolalg.Boolean, reverse_mapping: dict[sp.Symbol, Condition]) -> Node:
     if isinstance(expr, sp.Symbol):
         return reverse_mapping[expr]
     elif isinstance(expr, sp.And):
-        return And(*[_sympy_expr_to_node(arg, reverse_mapping) for arg in expr.args])
+        return And(
+            *[_sympy_expr_to_node(cast(sympy.logic.boolalg.Boolean, arg), reverse_mapping) for arg in expr.args]
+        )
     elif isinstance(expr, sp.Or):
-        return Or(*[_sympy_expr_to_node(arg, reverse_mapping) for arg in expr.args])
+        return Or(*[_sympy_expr_to_node(cast(sympy.logic.boolalg.Boolean, arg), reverse_mapping) for arg in expr.args])
     elif isinstance(expr, sp.Not):
-        return Not(_sympy_expr_to_node(expr.args[0], reverse_mapping))
+        return Not(_sympy_expr_to_node(cast(sympy.logic.boolalg.Boolean, expr.args[0]), reverse_mapping))
     else:
         raise ValueError(f"Unknown sympy expression type: {type(expr)}")
 
