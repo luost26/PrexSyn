@@ -22,7 +22,7 @@ def load_model(path: pathlib.Path | str, train: bool = False) -> tuple[Facade, P
     m_path = path.with_suffix(".ckpt")
     if not m_path.exists():
         url = f"{_remote_model_url}/{m_path.name}"
-        print(f"Model checkpoint not found locally at {m_path}, trying to download from {url}...")
+        print(f"[load_model] Model checkpoint not found locally at {m_path}, trying to download from {url}...")
         download(url, m_path)
 
     cs_dir = pathlib.Path(config.chemical_space.cache_dir)
@@ -30,7 +30,7 @@ def load_model(path: pathlib.Path | str, train: bool = False) -> tuple[Facade, P
     cs_name = cs_dir.name
     if not check_chemical_space_data_dir(cs_dir):
         print(
-            f"Chemical space data not found locally at {cs_dir}, "
+            f"[load_model] Chemical space data not found locally at {cs_dir}, "
             f"trying to download from {_remote_chemical_space_url}..."
         )
         for file_name in chemical_space_data_files:

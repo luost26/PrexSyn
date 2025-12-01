@@ -76,7 +76,6 @@ class RotaryEmbedding(nn.Module):
         # Reset the tables if the sequence length has changed,
         # or if we're on a new device (possibly due to tracing for instance)
         if seq_len > self._seq_len_cached:
-            print(f"Updating cos and sin tables for rotary embeddings (seq_len={seq_len}, old={self._seq_len_cached})")
             self._seq_len_cached = seq_len
             t = torch.arange(x.shape[seq_dimension], device=x.device).type_as(self.inv_freq)
             freqs = torch.einsum("i,j->ij", t, self.inv_freq)
