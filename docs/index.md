@@ -56,3 +56,14 @@ We provide a quick demo of chemical space projection using PrexSyn. You can find
 ### Miscellaneous
 
 - **MIT Coley Research Group**: [https://coley.mit.edu/](https://coley.mit.edu/)
+
+## Citation
+
+```bibtex
+@article{luo2025prexsyn,
+  title   = {Efficient and Programmable Exploration of Synthesizable Chemical Space},
+  author  = {Shitong Luo and Connor W. Coley},
+  year    = {2025},
+  journal = {arXiv preprint arXiv: 2512.00384}
+}
+```

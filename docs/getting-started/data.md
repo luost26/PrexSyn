@@ -42,21 +42,6 @@ Results:
       Building Block Index: 95219
       ID: EN300-29997
 
-- SMILES: COc1ccc(-c2ccnc(Nc3ccc(Nc4ccccc4)cc3)n2)cc1
-  Similarity: 0.9474
-  Synthesis:
-  - Reaction Index: 9
-    Possible Products:
-    - COc1ccc(-c2ccnc(Nc3ccc(Nc4ccccc4)cc3)n2)cc1
-    - COc1ccc(-c2ccnc(N(c3ccccc3)c3ccc(N)cc3)n2)cc1
-    Reactants:
-    - SMILES: COc1ccc(-c2ccnc(Cl)n2)cc1
-      Building Block Index: 198209
-      ID: EN300-249263
-    - SMILES: Nc1ccc(Nc2ccccc2)cc1
-      Building Block Index: 32824
-      ID: EN300-20711
-
 ...
 ```
 
