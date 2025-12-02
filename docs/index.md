@@ -31,9 +31,11 @@ We provide a quick demo of chemical space projection using PrexSyn. You can find
 
 ### Molecular Sampling
 
-![Molecular Sampling](imgs/sampling-1.png){: width="300" }
+![Molecular Sampling](imgs/sampling-1.png){: width="350" }
 /// caption
 ///
+
+![Molecular Sampling Performance](imgs/sampling-compare.png)
 
 ## Resources
 
