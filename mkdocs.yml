@@ -8,8 +8,9 @@ theme:
     - navigation.expand
     - navigation.path
     - toc.follow
-
+    - content.code.copy
+markdown_extensions:
+  - attr_list
 plugins:
   - search
   - awesome-nav
-

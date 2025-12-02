@@ -52,6 +52,7 @@ dev = [
     "ipykernel",
     "ipywidgets",
     "mkdocs-material",
+    "mkdocs-awesome-nav",
 ]
 
 [tool.pixi.workspace]

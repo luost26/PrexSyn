@@ -1,4 +1,4 @@
 nav:
-  - index.md
+  - Home: index.md
   - getting-started
   - reproducibility
