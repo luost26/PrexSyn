@@ -66,7 +66,7 @@ def main(
         facade=facade,
         model=model,
         init_query=init_query_lipinski(facade.property_set),
-        num_init_samples=1000,
+        num_init_samples=500,
         max_evals=50_000,
         step_strategy=FingerprintGenetic(
             bottleneck_size=50,

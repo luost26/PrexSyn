@@ -7,6 +7,7 @@ from rdkit.Chem import rdChemReactions
 
 from prexsyn.applications.analog import generate_analogs
 from prexsyn.factories import load_model
+from prexsyn.utils.draw import draw_synthesis
 from prexsyn.samplers.basic import BasicSampler
 from prexsyn_engine.synthesis import Synthesis
 from prexsyn_engine.fingerprints import tanimoto_similarity
@@ -62,9 +63,15 @@ def synthesis_to_string(synthesis: Synthesis) -> str:
     default="./data/trained_models/v1_converted.yaml",
 )
 @click.option("--smiles", type=str, required=True)
+@click.option("--draw-output", type=click.Path(path_type=pathlib.Path), default=None)
+@click.option("--top", type=int, default=10)
+@click.option("--num-samples", type=int, default=64)
 def main(
     model_path: pathlib.Path,
     smiles: str,
+    draw_output: pathlib.Path | None,
+    top: int,
+    num_samples: int,
 ) -> None:
     torch.set_grad_enabled(False)
     facade, model = load_model(model_path, train=False)
@@ -78,7 +85,7 @@ def main(
     sampler = BasicSampler(
         model,
         token_def=facade.tokenization.token_def,
-        num_samples=64,
+        num_samples=num_samples,
         max_length=16,
     )
 
@@ -103,16 +110,23 @@ def main(
             sim = tanimoto_similarity(prod, mol, fp_type="ecfp4")
             result_list.append((prod, synthesis, sim))
 
+    if draw_output is not None:
+        draw_output.mkdir(parents=True, exist_ok=True)
+
     result_list.sort(key=lambda x: x[2], reverse=True)
     print(f"Input: {smiles}")
     print(f"Target (Canonical SMILES): {canonical_smi}")
     print("Results:")
-    for prod, synthesis, sim in result_list[:10]:
+    for i, (prod, synthesis, sim) in enumerate(result_list[:top]):
         smi = Chem.MolToSmiles(prod, canonical=True)
         print(f"- SMILES: {smi}")
         print(f"  Similarity: {sim:.4f}")
         print("  Synthesis:")
         print(indent_lines(synthesis_to_string(synthesis), 1) + "\n")
+
+        if draw_output is not None:
+            im = draw_synthesis(synthesis, show_intermediate=True, show_num_cases=True)
+            im.save(draw_output / f"{i}.png")
 
 
 if __name__ == "__main__":

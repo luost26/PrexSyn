@@ -128,7 +128,7 @@ def draw_synthesis(
                                 item,
                                 {"Reaction": "reaction_index", "Name": "name"},
                             ),
-                            "#Cases": len(replay.top()) if show_num_cases else None,
+                            "Possible Prod.": len(replay.top()) if show_num_cases else None,
                         },
                     )
                 )
