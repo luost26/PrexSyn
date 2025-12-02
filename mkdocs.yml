@@ -8,4 +8,8 @@ theme:
     - navigation.expand
     - navigation.path
     - toc.follow
-    - awesome-pages
+
+plugins:
+  - search
+  - awesome-nav
+

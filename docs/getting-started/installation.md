@@ -4,11 +4,12 @@
 ## Pixi (Recommended)
 
 [Pixi](https://pixi.sh/) is highly recommended for managing PrexSyn environments. We used pixi for development. 
-Pixi is a conda-based environment manager. It creates environments on a per-project basis, so you don't need to worry about conflicts with your existing conda/mamba installations and environments.
 
-1. Install pixi by following the instructions on the [pixi installation page](https://pixi.sh/docs/installation).
+Pixi is a conda-based environment manager. It creates environments on a per-project basis, so you don't need to worry about conflicts with your existing conda/mamba installations.
 
-2. Now, you are all set! To activate the PrexSyn environment, simply run the following command in the root directory of the PrexSyn project:
+To get started with Pixi, first install pixi by following the instructions on the [pixi installation page](https://pixi.sh/latest/installation/).
+
+Now, you are all set! To activate the PrexSyn environment, simply run the following command in the root directory of the PrexSyn project:
 
 ```bash
 pixi shell
