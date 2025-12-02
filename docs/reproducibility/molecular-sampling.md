@@ -14,9 +14,15 @@ To reproduce the results in Table 2 of [the PrexSyn paper](https://arxiv.org/abs
 python scripts/benchmarks/optim.py
 ```
 
-Results will be saved in the `outputs/benchmarks/optim` directory. For example, the result for Amlodipine MPO can be found at `outputs/benchmarks/optim/amlodipine/log.txt`.
+This script runs molecular optimization tasks sequentially and each task is repeated 5 times.
+A subset of tasks can be specified using the `-t` or `--task` argument, and the full list of available tasks can be found in the script file.
+For example, to run only the Amlodipine MPO and Celecoxib Rediscovery tasks, use:
 
-The output should be similar to the following, which corresponds to the results in Table 2:
+```bash
+python scripts/benchmarks/optim.py -t amlodipine -t celecoxib_rediscovery
+```
+
+Results will be saved in the `outputs/benchmarks/optim` directory. For example, the result for Amlodipine MPO can be found at `outputs/benchmarks/optim/amlodipine/log.txt`. The log file should be similar to the following, which corresponds to the results in Table 2:
 
 ```
 ==== Summary ====
