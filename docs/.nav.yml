@@ -2,3 +2,5 @@ nav:
   - Home: index.md
   - getting-started
   - reproducibility
+  - customization
+  - PrexSyn Engine: prexsyn-engine

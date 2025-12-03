@@ -1,0 +1,3 @@
+# Composite Property Query
+
+Work in progress...

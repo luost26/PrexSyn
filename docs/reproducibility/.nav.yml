@@ -1,3 +1,5 @@
 nav:
   - chemical-space-projection.md
   - molecular-sampling.md
+  - property-query.md
+  - training.md
