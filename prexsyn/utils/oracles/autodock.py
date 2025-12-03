@@ -8,7 +8,7 @@ from typing import cast, overload
 
 import joblib
 import meeko  # type: ignore
-import scrubber  # type: ignore
+import molscrub  # type: ignore
 from rdkit import Chem
 from rdkit.Chem.MolStandardize import rdMolStandardize
 
@@ -166,7 +166,7 @@ class autodock_gpu:
             )
 
     def _scrub_ligand(self, mol: Chem.Mol) -> list[Chem.Mol]:
-        scrub = scrubber.Scrub()
+        scrub = molscrub.Scrub()
         try:
             mol_states: list[Chem.Mol] = scrub(mol)
         except RuntimeError:

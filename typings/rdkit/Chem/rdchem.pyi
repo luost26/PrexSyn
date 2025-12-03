@@ -1,0 +1,6 @@
+from _typeshed import Incomplete
+
+def __getattr__(name: str) -> Incomplete: ...
+
+class Mol(object):
+    def __getattr__(self, name: str) -> Incomplete: ...

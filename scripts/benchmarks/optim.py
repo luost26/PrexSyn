@@ -151,11 +151,7 @@ class Task:
                 df_result_all.append(df_result)
 
             auc_top10_all.append(auc_top10)
-            logger.info(
-                f"Run {run_id}/{self.num_runs}, "
-                f"AUC-Top10({self.max_evals / 1000}k): {auc_top10:.4f}, "
-                f"Evals: {len(df_result)}"
-            )
+            logger.info(f"Run {run_id}/{self.num_runs}, AUC-Top10({self.max_evals / 1000}k): {auc_top10:.4f}")
 
         logger.info("==== Summary ====")
         logger.info(f"Oracle: {self.name}")

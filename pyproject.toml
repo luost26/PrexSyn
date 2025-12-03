@@ -34,14 +34,13 @@ version = { attr = "prexsyn.__version__" }
 [tool.ruff]
 line-length = 119
 target-version = "py311"
-exclude = ["third_party"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["prexsyn", "prexsyn_engine"]
 
 [tool.pyright]
 typeCheckingMode = "standard"
-ignore = ["third_party", "scripts/internals"]
+ignore = ["scripts/internals"]
 
 [dependency-groups]
 dev = [
@@ -53,6 +52,14 @@ dev = [
     "ipywidgets",
     "mkdocs-material",
     "mkdocs-awesome-nav",
+    ## GuacaMol
+    "prexsyn-third-party @ git+https://github.com/luost26/prexsyn-third-party.git",
+    ## sEH proxy
+    "torch_geometric",
+    ## Autodock
+    "gemmi",
+    "meeko",
+    "molscrub",
 ]
 
 [tool.pixi.workspace]
@@ -61,11 +68,9 @@ platforms = ["linux-64"]
 
 [tool.pixi.pypi-dependencies]
 prexsyn = { path = ".", editable = true }
-prexsyn-third_party = { path = "./third_party", editable = false }
 
 [tool.pixi.environments]
-default = { features = ["prod-engine"], solve-group = "default" }
-dev = { features = ["dev", "prod-engine"], solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
 dev-engine = { features = ["dev", "dev-engine"], solve-group = "default" }
 
 [tool.pixi.tasks]
@@ -76,8 +81,6 @@ pip = "*"
 setuptools = "*"
 rdkit = ">=2025.3.6"
 graphviz = ">=13"
-
-[tool.pixi.feature.prod-engine.dependencies]
 prexsyn-engine = { version = ">=0.1.0" , channel = "luost26" }
 
 [tool.pixi.feature.dev-engine.dependencies]
