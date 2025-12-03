@@ -36,7 +36,8 @@ Results:
 ...
 ```
 
-You can also visualize the synthesis pathways using the `--draw-output` flag:
+You can also visualize the synthesis pathways using the `--draw-output` flag. 
+Graphviz is required for rendering the synthesis diagrams. If you installed the environment using Pixi, Graphviz should already be included. Otherwise, please run `conda install conda-forge::graphviz` to install it.
 
 ```bash
 python scripts/examples/projection.py \
