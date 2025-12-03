@@ -24,6 +24,28 @@ dependencies = [
     "wandb>=0.22.2,<0.23",
 ]
 
+[project.optional-dependencies]
+eval = [
+    ## GuacaMol
+    "prexsyn-third-party @ git+https://github.com/luost26/prexsyn-third-party.git",
+    ## sEH proxy
+    "torch_geometric",
+    ## Autodock
+    "gemmi",
+    "meeko",
+    "molscrub",
+]
+dev = [
+    "ruff",
+    "pyright",
+    "pre-commit",
+    "pytest",
+    "ipykernel",
+    "ipywidgets",
+    "mkdocs-material",
+    "mkdocs-awesome-nav",
+]
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["prexsyn", "prexsyn.*"]
@@ -42,26 +64,6 @@ known-first-party = ["prexsyn", "prexsyn_engine"]
 typeCheckingMode = "standard"
 ignore = ["scripts/internals"]
 
-[dependency-groups]
-dev = [
-    "ruff",
-    "pyright",
-    "pre-commit",
-    "pytest",
-    "ipykernel",
-    "ipywidgets",
-    "mkdocs-material",
-    "mkdocs-awesome-nav",
-    ## GuacaMol
-    "prexsyn-third-party @ git+https://github.com/luost26/prexsyn-third-party.git",
-    ## sEH proxy
-    "torch_geometric",
-    ## Autodock
-    "gemmi",
-    "meeko",
-    "molscrub",
-]
-
 [tool.pixi.workspace]
 channels = ["conda-forge", "luost26"]
 platforms = ["linux-64"]
@@ -70,8 +72,8 @@ platforms = ["linux-64"]
 prexsyn = { path = ".", editable = true }
 
 [tool.pixi.environments]
-dev = { features = ["dev"], solve-group = "default" }
-dev-engine = { features = ["dev", "dev-engine"], solve-group = "default" }
+dev = { features = ["eval", "dev"], solve-group = "default" }
+dev-engine = { features = ["eval", "dev", "dev-engine"], solve-group = "default" }
 
 [tool.pixi.tasks]
 

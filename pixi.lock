@@ -4034,7 +4034,7 @@ packages:
 - pypi: ./
   name: prexsyn
   version: 0.1.0
-  sha256: 6ce61a854a59760822610b58a6187f09ac947d77b7b901fffe5e0520dd016bfe
+  sha256: 12b8a0d21cfb112513e44c297be0f1b88d08e1ba27d07c2779aa46a0f9f9921f
   requires_dist:
   - click>=8.3.0,<9
   - hydra-core>=1.3.2,<2
@@ -4052,6 +4052,19 @@ packages:
   - torch>=2.8.0,<3
   - tqdm>=4.67.1,<5
   - wandb>=0.22.2,<0.23
+  - prexsyn-third-party @ git+https://github.com/luost26/prexsyn-third-party.git ; extra == 'eval'
+  - torch-geometric ; extra == 'eval'
+  - gemmi ; extra == 'eval'
+  - meeko ; extra == 'eval'
+  - molscrub ; extra == 'eval'
+  - ruff ; extra == 'dev'
+  - pyright ; extra == 'dev'
+  - pre-commit ; extra == 'dev'
+  - pytest ; extra == 'dev'
+  - ipykernel ; extra == 'dev'
+  - ipywidgets ; extra == 'dev'
+  - mkdocs-material ; extra == 'dev'
+  - mkdocs-awesome-nav ; extra == 'dev'
   requires_python: '>=3.11'
   editable: true
 - conda: https://conda.anaconda.org/luost26/linux-64/prexsyn-engine-0.1.1.dev1-py313h1ec077d_0.conda
