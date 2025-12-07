@@ -27,7 +27,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://prexsyn.readthedocs.io/"
 Documentation = "https://prexsyn.readthedocs.io/"
-Source = "https://github.com/luost26/PrexSyn"
+Source = "https://github.com/luost26/prexsyn"
 
 [project.optional-dependencies]
 eval = [

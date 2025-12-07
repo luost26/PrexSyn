@@ -4,7 +4,7 @@
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/luost26/PrexSyn.git
+git clone https://github.com/luost26/prexsyn.git
 cd PrexSyn
 ```
 

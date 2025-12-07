@@ -56,7 +56,7 @@ You can find a quick demo of molecular sampling [here](getting-started/examples.
 
 ### Repositories
 
-- **PrexSyn**: [https://github.com/luost26/PrexSyn](https://github.com/luost26/PrexSyn)
+- **PrexSyn**: [https://github.com/luost26/prexsyn](https://github.com/luost26/prexsyn)
 - **PrexSyn Engine**: The C++ backend that provides a high-throughput training data pipeline and a fast synthesis detokenizer. [https://github.com/luost26/prexsyn-engine](https://github.com/luost26/prexsyn-engine)
 - **Data and Weights**: Preprocessed chemical space data and trained model weights hosted on Hugging Face. [https://huggingface.co/datasets/luost26/prexsyn-data/tree/main](https://huggingface.co/datasets/luost26/prexsyn-data/tree/main)
 
