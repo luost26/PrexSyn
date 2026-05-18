@@ -11,6 +11,11 @@ theme:
     - content.code.copy
 markdown_extensions:
   - pymdownx.blocks.caption
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences
   - attr_list
   - footnotes
 plugins:
