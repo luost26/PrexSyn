@@ -30,4 +30,4 @@ for i, item in enumerate(result.items):
     img.close()
 ```
 
-More examples can be found in the [`scripts/examples`](./scripts/examples) directory.
+More examples can be found in the `scripts/examples` directory.
