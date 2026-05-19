@@ -45,6 +45,7 @@ class AllInOneLoader:
         if not cs_path.exists():
             cs_url = self._config.remote.chemical_space_url
             if cs_url is not None:
+                cs_path.parent.mkdir(parents=True, exist_ok=True)
                 download(cs_url, cs_path, desc="Downloading chemical space")
             else:
                 raise FileNotFoundError(f"Chemical space not found at {cs_path} and no remote URL provided.")
@@ -58,6 +59,7 @@ class AllInOneLoader:
         remote_conf = self._config.remote
         if not ckpt_path.exists():
             if remote_conf.checkpoint_url is not None:
+                ckpt_path.parent.mkdir(parents=True, exist_ok=True)
                 download(remote_conf.checkpoint_url, ckpt_path, desc="Downloading checkpoint")
             else:
                 raise FileNotFoundError(f"Checkpoint not found at {ckpt_path} and no remote URL provided.")
