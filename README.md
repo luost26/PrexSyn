@@ -12,7 +12,7 @@ synthesis*](https://arxiv.org/abs/2406.04628) (a molecular representation based 
 
 PrexSyn is trained on a billion-scale datastream of postfix notations paired with molecular descriptors using only two GPUs and 32 CPU cores in two days. This is made possible by [PrexSyn Engine](https://github.com/luost26/prexsyn-engine), a real-time, high-throughput C++-based data generation pipeline.
 
-**Note:** features described in the original paper (e.g. property-based queries) are not supported in the current version (v1) of PrexSyn for now. If you need these features, please switch the [v0 branch](https://github.com/luost26/prexsyn/tree/dev-v0).
+**Note:** features described in the original paper (e.g. property-based queries) are not supported in the current version (v1) of PrexSyn for now. If you need these features, please switch to the [v0 branch](https://github.com/luost26/prexsyn/tree/dev-v0).
 
 [[Documentation]](https://prexsyn.readthedocs.io)
 [[Paper]](https://arxiv.org/abs/2512.00384)
