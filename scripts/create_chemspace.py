@@ -23,12 +23,15 @@ def cached_load_reactions(rxn_path: Path):
         print(f"Loading reactions from cache: {cache_path}")
         return prexsyn_engine.chemspace.ReactionLibrary.deserialize(cache_path)
     else:
-        if rxn_path.suffix == ".csv":
+        suffix = rxn_path.suffix.lower()
+        if suffix == ".json":
+            rxn_lib = prexsyn_engine.chemspace.rxn_lib_from_json(rxn_path)
+        elif suffix == ".csv":
             rxn_lib = prexsyn_engine.chemspace.rxn_lib_from_csv(rxn_path)
-        elif rxn_path.suffix == ".txt":
+        elif suffix == ".txt":
             rxn_lib = prexsyn_engine.chemspace.rxn_lib_from_plain_text(rxn_path)
         else:
-            raise ValueError(f"Unsupported reaction library format: {rxn_path.suffix}")
+            raise ValueError(f"Unsupported reaction library format: {suffix}")
         rxn_lib.serialize(cache_path)
         return rxn_lib
 
