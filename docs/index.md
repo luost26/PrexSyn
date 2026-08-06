@@ -1,20 +1,36 @@
 # PrexSyn
 
-PrexSyn generates molecules together with synthesis pathways built from a defined building-block library and reaction set. A decoder-only transformer generates a postfix notation of synthesis conditioned on a molecular fingerprint. [PrexSyn Engine](prexsyn-engine/index.md) converts the notation into products and pathways.
+## Introduction
 
-## What you can do
+PrexSyn is an efficient, accurate, and programmable framework for synthesizable molecular design.
 
-| Task | Input | Result |
-| --- | --- | --- |
-| Chemical-space projection | A molecule as SMILES, an RDKit molecule, or a PrexSyn Engine molecule | Synthesizable analogs ranked by fingerprint similarity |
-| Descriptor-conditioned generation | An ECFP4 or FCFP4 fingerprint | Molecules and synthesis pathways |
-| Molecular sampling | A Python scoring function | Synthesizable candidates optimized by the current genetic sampler |
-| Model training | Building blocks and reaction SMARTS | A model trained from an on-the-fly C++ datastream |
+It uses a decoder-only transformer to autoregressively generate *postfix notations of synthesis*[^chemprojector]: a molecular representation based on chemical reactions and purchasable building blocks. Generation is conditioned on molecular descriptors.
 
-“Synthesizable” here means constructible under the configured reaction templates and building blocks. It is not a guarantee of experimental success.
+PrexSyn was trained on a billion-scale datastream of postfix notations paired with molecular descriptors using two GPUs and 32 CPU cores in two days. This scale is enabled by [PrexSyn Engine](prexsyn-engine/index.md), a real-time, high-throughput C++ data generation pipeline.
 
-!!! note "Current v1 scope"
-    General physicochemical-property conditioning and composite logical queries from the original paper are not available in v1. See [Paper and v1 differences](reproducibility/version-differences.md).
+[^chemprojector]: *Projecting Molecules into Synthesizable Chemical Spaces*. [https://arxiv.org/abs/2406.04628](https://arxiv.org/abs/2406.04628)
+
+!!! important "Need the exact paper features?"
+    Use the [`dev-v0` branch](https://github.com/luost26/prexsyn/tree/dev-v0). General physicochemical-property conditioning and composite logical queries from the original paper are deprecated in v1. See [Paper and v1 differences](reproducibility/version-differences.md).
+
+“Synthesizable” means constructible under the configured reaction templates and building blocks. It is not a guarantee of experimental success.
+
+## Capabilities
+
+| Capability | Input | Output |
+| :---: | :---: | :---: |
+| **Chemical-space projection** | ![Molecule used as projection input](imgs/proj-in.png)<br>Graph or SMILES | ![Synthesizable analog and pathway](imgs/proj-out.png)<br>Ranked analogs and pathways |
+| **Fingerprint/descriptor-based generation** | ![Fingerprint used as generation input](imgs/fp-in.png)<br>ECFP4 or FCFP4 | ![Generated molecule and pathway](imgs/proj-out.png)<br>Molecules and pathways |
+| **Molecular sampling** | ![Scoring function used for sampling](imgs/sample-in.png)<br>Scoring function | ![Optimized synthesizable molecules](imgs/sample-out.png)<br>Optimized candidates |
+
+## Performance
+
+The following figures show the results reported in the PrexSyn paper. The projection benchmark is maintained in v1. Migration of the optimization benchmark to v1 is work in progress.
+
+| Capability | Result |
+| --- | :---: |
+| Record-high accuracy and speed in chemical-space projection and fingerprint/descriptor-based generation | ![Projection performance comparison](imgs/projection-compare.png) |
+| Record-high sample efficiency in molecular sampling against scoring functions | ![Molecular sampling performance comparison](imgs/sampling-compare-1.png) |
 
 ## Start here
 
@@ -24,10 +40,20 @@ PrexSyn generates molecules together with synthesis pathways built from a define
 
 ## Resources
 
-- [PrexSyn source](https://github.com/luost26/prexsyn)
-- [PrexSyn Engine source](https://github.com/luost26/prexsyn-engine)
-- [Data and model weights](https://huggingface.co/datasets/luost26/prexsyn-data/tree/main)
-- [PrexSyn paper](https://arxiv.org/abs/2512.00384)
+### Repositories
+
+- **PrexSyn**: [https://github.com/luost26/prexsyn](https://github.com/luost26/prexsyn)
+- **PrexSyn Engine**: C++ backend for high-throughput training data generation and synthesis detokenization. [https://github.com/luost26/prexsyn-engine](https://github.com/luost26/prexsyn-engine)
+- **Data and model weights**: Preprocessed chemical spaces and trained model weights. [https://huggingface.co/datasets/luost26/prexsyn-data/tree/main](https://huggingface.co/datasets/luost26/prexsyn-data/tree/main)
+
+### Papers and documentation
+
+- **PrexSyn paper**: *Efficient and Programmable Exploration of Synthesizable Chemical Space*. [https://arxiv.org/abs/2512.00384](https://arxiv.org/abs/2512.00384)
+- **PrexSyn documentation**: [https://prexsyn.readthedocs.io](https://prexsyn.readthedocs.io)
+
+### Community
+
+- **MIT Coley Research Group**: [https://coley.mit.edu/](https://coley.mit.edu/)
 
 ## Citation
 
