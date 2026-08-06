@@ -4,7 +4,15 @@ The training script uses PyTorch Lightning and the PrexSyn Engine datastream. It
 
 ## Configure training
 
-Start from a shipped YAML in `configs/`. The required sections are:
+Start with [`configs/enamine-test-small_rxn115.yml`](https://github.com/luost26/prexsyn/blob/main/configs/enamine-test-small_rxn115.yml). It is a complete, runnable example that uses the bundled small building-block set and `rxn115` reactions:
+
+```bash
+cp configs/enamine-test-small_rxn115.yml configs/my_space.yml
+```
+
+Edit the copy for your chemical space and training resources. For the full released architecture, refer to [`configs/enamine2310_rxn115_202511.yml`](https://github.com/luost26/prexsyn/blob/main/configs/enamine2310_rxn115_202511.yml); [`configs/enamine2310_rxn115_bsz512.yml`](https://github.com/luost26/prexsyn/blob/main/configs/enamine2310_rxn115_bsz512.yml) is the lower-batch-size variant.
+
+Each configuration contains these required sections:
 
 | Section | Controls |
 | --- | --- |

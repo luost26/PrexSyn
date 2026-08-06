@@ -10,15 +10,36 @@ Invalid molecules are skipped with a warning. Review the final loaded count befo
 
 ## 2. Prepare reactions
 
-Use a UTF-8 text file with one reaction SMARTS per line. Blank lines and lines beginning with `#` are ignored. Fields are tab-separated:
+### JSON (preferred)
+
+Use a JSON array with one object per reaction. Name each reactant and give its SMARTS pattern separately from the product SMARTS:
+
+```json
+[
+  {
+    "name": "Suzuki Coupling",
+    "reactants": {
+      "Halides": "[c,C!^3:1]-[Cl,Br,I]",
+      "Boronates": "[c,C!^3:2]-[B]"
+    },
+    "product": "[c,C!^3:1]-[c,C!^3:2]"
+  }
+]
+```
+
+`reactants` must be a non-empty object that maps reactant names to SMARTS. `product` is required. `name` is optional; the engine assigns `RXN_<entry number>` when it is omitted.
+
+### Tab-separated text
+
+As a secondary format, use a UTF-8 text file with one reaction per line. Blank lines and lines beginning with `#` are ignored. Fields must be **tab-separated**:
 
 ```text
-<reaction SMARTS>\t<reaction name>\t<reactant 1 name>\t<reactant 2 name>
+<reaction SMARTS>	<reaction name>	<reactant 1 name>	<reactant 2 name>
 ```
 
 Only the SMARTS field is required. Missing reaction names become `RXN_<line number>`, and missing reactant names become `R0`, `R1`, and so on.
 
-The repository's `data/reactions/rxn115.txt` is a working example.
+The repository's `data/reactions/rxn115.txt` is a working tab-separated example.
 
 ## 3. Create a configuration
 
@@ -32,7 +53,7 @@ cp configs/enamine-test-small_rxn115.yml configs/my_space.yml
 chemical_space:
   cache_path: data/chemical_spaces/my_space.chemspace
   bb_path: data/building_blocks/my_building_blocks.sdf
-  rxn_path: data/reactions/my_reactions.txt
+  rxn_path: data/reactions/my_reactions.json
   building_block_selectivity_cutoff: 2
 ```
 

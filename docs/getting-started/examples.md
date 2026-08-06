@@ -41,4 +41,4 @@ uv run python scripts/examples/sampling.py --out-fig ./sampling.png
 
 It initializes a population, runs 20 generations, and prints the best and mean fitness at each step. `--out-fig` is optional and requires Graphviz. Use `--device cpu` only when CUDA is unavailable.
 
-To optimize another objective, implement a callable that accepts a sequence of `(Synthesis, Molecule)` pairs and returns a one-dimensional NumPy array of scores. See [`scripts/examples/sampling.py`](https://github.com/luost26/prexsyn/blob/main/scripts/examples/sampling.py) for the complete interface.
+To optimize another objective, see [Sampling molecules using your scoring function](../customization/sampling.md).
