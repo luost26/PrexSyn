@@ -10,6 +10,7 @@ theme:
     - toc.follow
     - content.code.copy
 markdown_extensions:
+  - admonition
   - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true

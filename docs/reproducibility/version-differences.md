@@ -1,0 +1,17 @@
+# Paper and v1 differences
+
+!!! important "Need the exact paper features?"
+    Use the [`dev-v0` branch](https://github.com/luost26/prexsyn/tree/dev-v0). Its environment, APIs, data, and checkpoints differ from v1.
+
+The [PrexSyn paper](https://arxiv.org/abs/2512.00384) describes the original research system. The current v1 code keeps the projection architecture and C++ data engine but does not expose every paper feature.
+
+| Area | Paper | Current v1 |
+| --- | --- | --- |
+| Chemical-space projection | ECFP4-conditioned generation and ranking | Supported; benchmark script included |
+| Descriptor conditioning | ECFP4, FCFP4, BRICS fragments, and physicochemical descriptors | ECFP4 and FCFP4 registered |
+| Composite property queries | AND, OR, and NOT composition | Deprecated |
+| Property-conditioned generation | Included | Deprecated |
+| Molecular optimization | Query-space optimization and paper benchmarks | ECFP4 genetic sampler and QED example available; optimization benchmark migration is work in progress |
+| Data engine | Multithreaded C++ generation and detokenization | Supported by PrexSyn Engine 1.1 |
+
+The [projection benchmark](chemical-space-projection.md) is the maintained v1 reproduction path. Migration of the optimization benchmark to v1 is in progress.

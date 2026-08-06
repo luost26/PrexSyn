@@ -211,3 +211,4 @@ __marimo__/
 
 /logs*
 /notebooks
+.DS_Store

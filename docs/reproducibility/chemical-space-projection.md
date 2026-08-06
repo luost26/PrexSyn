@@ -1,27 +1,30 @@
 # Chemical space projection
 
-To reproduce the results in Table 1 of [the PrexSyn paper](https://arxiv.org/abs/2512.00384), run the following benchmark script:
+The v1 repository includes the projection benchmark used for Table 1 of the [PrexSyn paper](https://arxiv.org/abs/2512.00384).
+
+## Run the full benchmark
 
 ```bash
-python scripts/benchmarks/projection.py
+uv run python scripts/benchmarks/projection.py
 ```
 
-There are two benchmark datasets (Enamine REAL and ChEMBL) and three different sample sizes (64, 128, and 256). For each setting, 5 independent runs are performed, leading to a total of 2x3x5=30 runs.
+The script evaluates the included 1,000-molecule Enamine REAL and ChEMBL subsets with 64, 128, and 256 samples per target. It performs five runs for every dataset/sample-count pair: 30 runs and 30,000 projections in total.
 
-The output should be similar to the following, which corresponds to the results in Table 1:
+The default device is CUDA. Useful options are:
 
-```
-   dataset  num_samples  similarity_mean  similarity_std  recons_mean  recons_std
-0   ChEMBL           64           0.7300          0.0008       0.2540      0.0031
-1   ChEMBL          128           0.7429          0.0006       0.2718      0.0033
-2   ChEMBL          256           0.7533          0.0011       0.2832      0.0020
-3  Enamine           64           0.9819          0.0005       0.9264      0.0030
-4  Enamine          128           0.9845          0.0004       0.9360      0.0023
-5  Enamine          256           0.9859          0.0007       0.9406      0.0026
-   num_samples  time_mean  time_std
-0           64     0.1021    0.0312
-1          128     0.1490    0.0378
-2          256     0.2618    0.0563
+```bash
+uv run python scripts/benchmarks/projection.py \
+    --device cuda \
+    --num-runs 5 \
+    --out ./outputs/benchmarks/analog
 ```
 
-Please note that sampling time is dependent on your specific hardware and system load. The results shown above and in the paper were obtained using a single NVIDIA 4090 GPU, as detailed in the paper.
+Each target result is cached in an LMDB file under the output directory. Rerunning the same settings resumes from cached entries. Delete or choose another output directory when you need an independent rerun.
+
+After all runs finish, the script writes `summary.csv` and prints grouped similarity, reconstruction-rate, and timing statistics.
+
+## Paper settings
+
+The paper reports results from one NVIDIA RTX 4090. Sampling is stochastic, and timing depends on the GPU, CPU, storage, and system load. Compare aggregate means and standard deviations rather than expecting identical rows.
+
+The released configuration downloads the paper checkpoint and its matching Enamine/Rxn115 chemical-space cache automatically.

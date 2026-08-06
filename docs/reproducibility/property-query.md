@@ -1,3 +1,0 @@
-# Composite property query
-
-Work in progress...

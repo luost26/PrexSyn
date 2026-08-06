@@ -1,32 +1,35 @@
-
 # Installation
 
-## Clone the repository
+PrexSyn requires Python 3.11 or newer. The published PrexSyn Engine wheels currently target Linux x86-64; CUDA is recommended for model inference and required by the training script.
+
+## Install for the examples
 
 ```bash
 git clone https://github.com/luost26/prexsyn.git
 cd prexsyn
+uv sync
 ```
 
-## UV (recommended)
-
-[UV](https://docs.astral.sh/uv/) is a modern and fast Python environment manager. We highly recommend using UV for managing PrexSyn environments.
-
-With UV, You don't need to explicitly create a virtual environment. Simply run any uv command in the PrexSyn directory, and UV will automatically create and manage an isolated environment for you according to the `pyproject.toml` and `uv.lock` files, for example:
+[uv](https://docs.astral.sh/uv/) creates the environment from `pyproject.toml` and `uv.lock`. Verify both packages:
 
 ```bash
-uv run python
+uv run python -c "import prexsyn, prexsyn_engine; print(prexsyn.__version__)"
 ```
 
-This will start a Python interpreter with the PrexSyn environment activated. You can try importing PrexSyn to verify the installation:
+Run commands from the repository root. Shipped configuration files use paths relative to that directory.
 
-```python
-import prexsyn
-import prexsyn_engine
+## Install in another project
+
+```bash
+python -m pip install "prexsyn @ git+https://github.com/luost26/prexsyn.git"
 ```
 
-## Changing PyTorch CUDA version
+PrexSyn Engine is installed as a dependency. A PrexSyn release on PyPI is not yet available.
 
-By default, UV installs the latest PyTorch version (probably) with the latest CUDA version. Some users may want to use a different CUDA version for compatibility with their hardware or other software.
+## Choose a device
 
-In such cases, please refer to the UV documentation for instructions on how to change the PyTorch CUDA version in your UV environment by editing the `pyproject.toml` file: [https://docs.astral.sh/uv/guides/integration/pytorch/#using-a-pytorch-index](https://docs.astral.sh/uv/guides/integration/pytorch/#using-a-pytorch-index)
+Example scripts default to `--device cuda`. Use `--device cpu` when CUDA is unavailable, but expect substantially slower inference. To select a different PyTorch/CUDA build, follow the [uv PyTorch guide](https://docs.astral.sh/uv/guides/integration/pytorch/#using-a-pytorch-index) before syncing the environment.
+
+## Optional pathway images
+
+Install the [Graphviz](https://graphviz.org/download/) system package to use `--draw-output-dir` or `item.get_image()`. Python dependencies alone are not enough because `pydot` calls the Graphviz executable.

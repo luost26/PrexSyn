@@ -1,6 +1,7 @@
 nav:
   - Home: index.md
   - getting-started
-  - reproducibility
+  - How PrexSyn works: concepts.md
   - customization
+  - reproducibility
   - PrexSyn Engine: prexsyn-engine

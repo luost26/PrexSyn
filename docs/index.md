@@ -1,49 +1,33 @@
 # PrexSyn
 
+PrexSyn generates molecules together with synthesis pathways built from a defined building-block library and reaction set. A decoder-only transformer generates a postfix notation of synthesis conditioned on a molecular fingerprint. [PrexSyn Engine](prexsyn-engine/index.md) converts the notation into products and pathways.
 
-## Introduction
+## What you can do
 
-PrexSyn is an efficient, accurate, and programmable framework for synthesizable molecular design.
-It is based on a decoder-only transformer architecture that autoregressively generates *postfix notations of
-synthesis*[^chemprojector] (a molecular representation based on chemical reactions and purchasable building blocks) conditioned on molecular descriptors.
+| Task | Input | Result |
+| --- | --- | --- |
+| Chemical-space projection | A molecule as SMILES, an RDKit molecule, or a PrexSyn Engine molecule | Synthesizable analogs ranked by fingerprint similarity |
+| Descriptor-conditioned generation | An ECFP4 or FCFP4 fingerprint | Molecules and synthesis pathways |
+| Molecular sampling | A Python scoring function | Synthesizable candidates optimized by the current genetic sampler |
+| Model training | Building blocks and reaction SMARTS | A model trained from an on-the-fly C++ datastream |
 
-[^chemprojector]: Projecting Molecules into Synthesizable Chemical Spaces. [https://arxiv.org/abs/2406.04628](https://arxiv.org/abs/2406.04628)
+“Synthesizable” here means constructible under the configured reaction templates and building blocks. It is not a guarantee of experimental success.
 
-PrexSyn is trained on a billion-scale datastream of postfix notations paired with molecular descriptors using only two GPUs and 32 CPU cores in two days. This is made possible by [PrexSyn Engine](https://github.com/luost26/prexsyn-engine), a real-time, high-throughput C++-based data generation pipeline.
+!!! note "Current v1 scope"
+    General physicochemical-property conditioning and composite logical queries from the original paper are not available in v1. See [Paper and v1 differences](reproducibility/version-differences.md).
 
+## Start here
 
-## Capabilities
-
-| Capability | Input | Output |
-| :---: | :---: | :---: |
-| **Chemical space projection** | ![](imgs/proj-in.png) <br/> Graph / SMILES | ![](imgs/proj-out.png) <br/> |
-| **Fingerprint/descriptor based generation** | ![](imgs/fp-in.png) <br/> Fingerprint / descriptor | ![](imgs/proj-out.png) <br/>  |
-| **Molecular sampling** | ![](imgs/sample-in.png) <br/> Scoring functions | ![](imgs/sample-out.png) <br/> |
-
-## Performance
-
-| Capability |     Result      |
-| :--- | :------------: |
-| Record-high accuracy and speed in chemical space projection and fingerprint/descriptor-based generation | ![Performance comparison](imgs/projection-compare.png) |
-| Record-high sample efficiency in molecular sampling against scoring functions | ![Molecular Sampling Performance](imgs/sampling-compare-1.png) |
-
+1. [Install PrexSyn](getting-started/installation.md).
+2. Run the [projection example](getting-started/examples.md#project-a-molecule).
+3. Use the [Python API](getting-started/import.md) or [define a chemical space](customization/chemical-space.md).
 
 ## Resources
 
-### Repositories
-
-- **PrexSyn**: [https://github.com/luost26/prexsyn](https://github.com/luost26/prexsyn)
-- **PrexSyn Engine**: The C++ backend that provides a high-throughput training data pipeline and a fast synthesis detokenizer. [https://github.com/luost26/prexsyn-engine](https://github.com/luost26/prexsyn-engine)
-- **Data and Weights**: Preprocessed chemical space data and trained model weights hosted on Hugging Face. [https://huggingface.co/datasets/luost26/prexsyn-data/tree/main](https://huggingface.co/datasets/luost26/prexsyn-data/tree/main)
-
-### Papers and Documentation
-
-- **PrexSyn Paper**: Efficient and Programmable Exploration of Synthesizable Chemical Space. [https://arxiv.org/abs/2512.00384](https://arxiv.org/abs/2512.00384)
-- **PrexSyn Documentation**: [https://prexsyn.readthedocs.io](https://prexsyn.readthedocs.io)
-
-### Miscellaneous
-
-- **MIT Coley Research Group**: [https://coley.mit.edu/](https://coley.mit.edu/)
+- [PrexSyn source](https://github.com/luost26/prexsyn)
+- [PrexSyn Engine source](https://github.com/luost26/prexsyn-engine)
+- [Data and model weights](https://huggingface.co/datasets/luost26/prexsyn-data/tree/main)
+- [PrexSyn paper](https://arxiv.org/abs/2512.00384)
 
 ## Citation
 
