@@ -49,27 +49,38 @@ uv run python scripts/train.py configs/my_space.yml \
     --ckpt-path logs/<run>/last.ckpt
 ```
 
-## Export for `AllInOneLoader`
+## Prepare the model for inference
 
-Lightning checkpoints include trainer state and prefix model parameters with `model.`. Export the raw model state expected by `AllInOneLoader`:
+`AllInOneLoader` is the high-level entry point for inference. Given a model YAML, it:
 
-```python
-from pathlib import Path
+- finds the raw model checkpoint with the same filename stem;
+- loads or downloads the configured chemical-space cache;
+- constructs the model with dimensions that match that chemical space;
+- creates the multithreaded synthesis detokenizer;
+- caches the model, chemical space, and detokenizer after their first use.
 
-import torch
+For example, `AllInOneLoader("data/trained_models/my_space.yml")` expects the model weights at `data/trained_models/my_space.ckpt`. The YAML's `chemical_space.cache_path` must point to the cache used during training.
 
-lightning_path = Path("logs/<run>/last.ckpt")
-output_path = Path("data/trained_models/my_space.ckpt")
+Lightning checkpoints contain trainer state and store model parameters under a `model.` prefix. Convert one to the raw state dictionary expected by `AllInOneLoader` with the provided script:
 
-checkpoint = torch.load(lightning_path, map_location="cpu", weights_only=False)
-model_state = {
-    key.removeprefix("model."): value
-    for key, value in checkpoint["state_dict"].items()
-    if key.startswith("model.")
-}
-torch.save(model_state, output_path)
+```bash
+cp configs/my_space.yml data/trained_models/my_space.yml
+
+uv run python scripts/export_model.py \
+    logs/<run>/last.ckpt \
+    data/trained_models/my_space.ckpt
 ```
 
-Copy the training YAML to `data/trained_models/my_space.yml` and keep its `chemical_space.cache_path` pointed at the training cache. The YAML and `.ckpt` must share a filename stem.
+The script extracts the model parameters, removes the `model.` prefix, and writes the raw checkpoint. It asks before overwriting an existing output; pass `--force` to overwrite without confirmation.
 
-The `--ckpt-path` option resumes Lightning training; it does not accept the raw checkpoint used by `AllInOneLoader`.
+Load the converted model and its matching detokenizer:
+
+```python
+from prexsyn.shortcuts import AllInOneLoader
+
+loader = AllInOneLoader("data/trained_models/my_space.yml")
+model = loader.model().to("cuda").eval()
+detokenizer = loader.detokenizer()
+```
+
+The training script's `--ckpt-path` option resumes Lightning training. It does not accept or produce the raw checkpoint format used by `AllInOneLoader` without this conversion step.

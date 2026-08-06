@@ -66,17 +66,5 @@ The main controls in the example are:
 
 Larger populations and more generations require more scoring-function evaluations. The process is stochastic unless you seed NumPy and PyTorch.
 
-## Draw the best lineage
-
-Install Graphviz, then pass an output path:
-
-```bash
-uv run python scripts/examples/my_sampling.py \
-    --device cuda \
-    --out-fig ./sampling.png
-```
-
-The image shows the fingerprint ancestry, molecule, and fitness of each individual leading to the best candidate found.
-
 !!! note "Current limitation"
     The genetic sampler currently supports boolean descriptors only. The shipped example uses ECFP4.
