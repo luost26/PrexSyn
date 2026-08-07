@@ -413,6 +413,22 @@ def main(
     output_dir.mkdir(parents=True, exist_ok=True)
     tasks = selected_tasks or STANDARD_TASKS
     run_indices = resolve_run_indices(selected_runs, num_runs)
+    config = {
+        "config": str(config_path),
+        "device": device,
+        "tasks": list(tasks),
+        "num_runs": num_runs,
+        "runs": list(run_indices),
+        "max_evals": max_evals,
+        "population_size": population_size,
+        "offspring_size": offspring_size,
+        "temperature": temperature,
+        "num_samples": num_samples,
+        "batch_size_limit": batch_size_limit,
+        "seed": seed,
+        "time_limit": time_limit,
+    }
+    (output_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n")
 
     if summarize_only:
         run_summaries = collect_run_summaries(
@@ -436,23 +452,6 @@ def main(
         num_samples=num_samples,
         batch_size_limit=batch_size_limit,
     )
-
-    config = {
-        "config": str(config_path),
-        "device": device,
-        "tasks": list(tasks),
-        "num_runs": num_runs,
-        "runs": list(run_indices),
-        "max_evals": max_evals,
-        "population_size": population_size,
-        "offspring_size": offspring_size,
-        "temperature": temperature,
-        "num_samples": num_samples,
-        "batch_size_limit": batch_size_limit,
-        "seed": seed,
-        "time_limit": time_limit,
-    }
-    (output_dir / "config.json").write_text(json.dumps(config, indent=2) + "\n")
 
     run_summaries: list[dict[str, float | int | str]] = []
     for task_name in tasks:
