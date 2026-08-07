@@ -25,7 +25,7 @@ PrexSyn was trained on a billion-scale datastream of postfix notations paired wi
 
 ## Performance
 
-The following figures show the results reported in the PrexSyn paper. The projection benchmark is maintained in v1. Migration of the optimization benchmark to v1 is work in progress.
+The following figures show the results reported in the PrexSyn paper. The projection and standard molecular-optimization benchmarks are maintained in v1.
 
 | Capability | Result |
 | --- | :---: |

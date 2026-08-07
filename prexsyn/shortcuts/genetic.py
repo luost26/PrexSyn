@@ -50,8 +50,9 @@ class Population:
         seen = set()
         unique_indices = []
         for i, (_, mol) in enumerate(self.phenotypes):
-            if mol.smiles not in seen:
-                seen.add(mol.smiles)
+            smiles = mol.smiles()
+            if smiles not in seen:
+                seen.add(smiles)
                 unique_indices.append(i)
         return self.index_select(unique_indices)
 
@@ -311,21 +312,32 @@ class EvolutionaryTreeDraw:
             return PIL.Image.open(io.BytesIO(P.create_png()))  # type: ignore[attr-defined]
 
 
-def initialize(size: int, projector: MoleculeProjector, fn: _FitnessFunction):
+def initialize(
+    size: int,
+    projector: MoleculeProjector,
+    fn: _FitnessFunction,
+    *,
+    oversample_factor: int = 2,
+):
+    if size <= 0:
+        raise ValueError("size must be positive.")
+    if oversample_factor <= 0:
+        raise ValueError("oversample_factor must be positive.")
     if projector.descriptor_function.dtype() != np.dtype(bool):
         raise NotImplementedError("Only boolean genotypes are supported for now.")
-    rand_genotypes = np.random.rand(size * 2, *projector.descriptor_function.size()) < 0.02
+    num_attempts = size * oversample_factor
+    rand_genotypes = np.random.rand(num_attempts, *projector.descriptor_function.size()) < 0.02
 
     embryos = EmbryoSet(
         genotypes=rand_genotypes,
-        unique_identifiers=np.arange(size * 2),
-        parents=np.full((size * 2, 2), -1),
+        unique_identifiers=np.arange(num_attempts),
+        parents=np.full((num_attempts, 2), -1),
     )
 
     population = hatch(embryos, projector, projector.descriptor_function, fn)
     history = History()
     history.add_population(population)
-    return population, history
+    return population.dedup().topk(size), history
 
 
 def evolve(

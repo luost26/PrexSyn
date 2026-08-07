@@ -59,7 +59,7 @@ The main controls in the example are:
 | Setting | Example value | Effect |
 | --- | ---: | --- |
 | `MoleculeProjector.num_samples` | `8` | Pathways sampled for each fingerprint |
-| `initialize(size=...)` | `100` | Initialization scale; the implementation attempts `2 × size` embryo fingerprints |
+| `initialize(size=...)` | `100` | Initial population size; by default the implementation attempts `2 × size` embryo fingerprints and retains the best unique candidates |
 | Number of `evolve` calls | `20` | Generations |
 | `evolve(k=...)` | `50` | Children generated and candidates retained after each generation |
 | `evolve(t=...)` | `0.5` | Selection temperature; lower positive values favor high-scoring parents more strongly |
