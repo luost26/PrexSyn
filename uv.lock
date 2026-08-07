@@ -2497,6 +2497,7 @@ eval = [
     { name = "gemmi" },
     { name = "meeko" },
     { name = "molscrub" },
+    { name = "prexsyn-third-party" },
     { name = "torch-geometric" },
 ]
 
@@ -2510,7 +2511,7 @@ requires-dist = [
     { name = "ipykernel", marker = "extra == 'dev'" },
     { name = "ipywidgets", marker = "extra == 'dev'" },
     { name = "joblib", specifier = ">=1.5.2" },
-    { name = "lightning", specifier = ">=2.5.5" },
+    { name = "lightning", specifier = ">=2.0.0" },
     { name = "lmdb", specifier = ">=1.7.3" },
     { name = "matplotlib", specifier = ">=3.10.6" },
     { name = "meeko", marker = "extra == 'eval'" },
@@ -2522,6 +2523,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pre-commit", marker = "extra == 'dev'" },
     { name = "prexsyn-engine", specifier = ">=1.1.0,<1.2.0" },
+    { name = "prexsyn-third-party", marker = "extra == 'eval'", specifier = ">=0.1" },
     { name = "psutil", specifier = ">=7.2.2" },
     { name = "pydot", specifier = ">=4.0.1" },
     { name = "pyright", marker = "extra == 'dev'" },
@@ -2533,7 +2535,7 @@ requires-dist = [
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "torch", specifier = ">=2.0.0" },
     { name = "torch-geometric", marker = "extra == 'eval'" },
-    { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "tqdm", specifier = ">=4.67.0" },
     { name = "twine", marker = "extra == 'dev'" },
     { name = "wandb", specifier = ">=0.22.2" },
 ]
@@ -2550,6 +2552,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/45/bdf3c4dbdd8ab35a7d680be0c5b25eb391a6695058e59ab0dfa6b090a7b1/prexsyn_engine-1.1.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:1fa7f1eeb5130aecdeee073327224e5d4baff83ba9919358d68961b61489e206", size = 3501790, upload-time = "2026-04-20T18:21:13.467Z" },
     { url = "https://files.pythonhosted.org/packages/f1/48/5292e23805300a362df3cffa9652a1d1e16695a49ac179723b34545b6de4/prexsyn_engine-1.1.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4d09b618db58c600b2b610e6416eaeb83a3479515dff674d13d7ad6a5151490c", size = 3502132, upload-time = "2026-04-20T18:21:15.469Z" },
     { url = "https://files.pythonhosted.org/packages/bd/92/26efe38019bc59f1abf9a3f011ee933c44190f0149d5c281e262c1edf01c/prexsyn_engine-1.1.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:f8883aa503cb99ba23a495db2a5735efd90862ef53520f6aafb5345e390f7117", size = 3512362, upload-time = "2026-04-20T18:21:17.085Z" },
+]
+
+[[package]]
+name = "prexsyn-third-party"
+version = "0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e9/df/374412d3a43f5f3d83c1f956003b7ccd1abb4c8f7e3cf89c50456482cf5f/prexsyn_third_party-0.1.tar.gz", hash = "sha256:00ef837a636836b2f23e98228f02aac25d92dd8a68113b208a4428af8cb485d1", size = 27044, upload-time = "2026-08-07T17:23:45.257Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/cc/13/737544a4db9ffc17a5cbf6f9b28b123e83a06455b9c7ef503e62bb97ddc5/prexsyn_third_party-0.1-py3-none-any.whl", hash = "sha256:f74f695d253128f3028b993cb83d2275b59253154938ed570f9f10b73576b3f3", size = 35789, upload-time = "2026-08-07T17:23:44.11Z" },
 ]
 
 [[package]]

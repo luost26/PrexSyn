@@ -50,8 +50,9 @@ class Population:
         seen = set()
         unique_indices = []
         for i, (_, mol) in enumerate(self.phenotypes):
-            if mol.smiles not in seen:
-                seen.add(mol.smiles)
+            smiles = mol.smiles()
+            if smiles not in seen:
+                seen.add(smiles)
                 unique_indices.append(i)
         return self.index_select(unique_indices)
 
@@ -154,21 +155,25 @@ class Individual:
 
 
 class History:
-    def __init__(self):
+    def __init__(self, record_individuals: bool = True):
         self.individuals: dict[int, Individual] = {}
         self.max_unique_id = -1
+        self.record_individuals = record_individuals
 
     def add_population(self, population: Population):
         for i in range(population.size()):
+            unique_id = int(population.unique_identifiers[i])
+            self.max_unique_id = max(self.max_unique_id, unique_id)
+            if not self.record_individuals:
+                continue
             individual = Individual(
                 genotype=population.genotypes[i],
                 phenotype=population.phenotypes[i],
                 fitness=float(population.fitnesses[i]),
-                unique_id=int(population.unique_identifiers[i]),
+                unique_id=unique_id,
                 parent_ids=tuple(int(p) for p in population.parents[i]),
             )
             self.individuals[individual.unique_id] = individual
-            self.max_unique_id = max(self.max_unique_id, individual.unique_id)
 
     def next_unique_id(self):
         return self.max_unique_id + 1
@@ -311,21 +316,33 @@ class EvolutionaryTreeDraw:
             return PIL.Image.open(io.BytesIO(P.create_png()))  # type: ignore[attr-defined]
 
 
-def initialize(size: int, projector: MoleculeProjector, fn: _FitnessFunction):
+def initialize(
+    size: int,
+    projector: MoleculeProjector,
+    fn: _FitnessFunction,
+    *,
+    oversample_factor: int = 2,
+    record_history: bool = True,
+):
+    if size <= 0:
+        raise ValueError("size must be positive.")
+    if oversample_factor <= 0:
+        raise ValueError("oversample_factor must be positive.")
     if projector.descriptor_function.dtype() != np.dtype(bool):
         raise NotImplementedError("Only boolean genotypes are supported for now.")
-    rand_genotypes = np.random.rand(size * 2, *projector.descriptor_function.size()) < 0.02
+    num_attempts = size * oversample_factor
+    rand_genotypes = np.random.rand(num_attempts, *projector.descriptor_function.size()) < 0.02
 
     embryos = EmbryoSet(
         genotypes=rand_genotypes,
-        unique_identifiers=np.arange(size * 2),
-        parents=np.full((size * 2, 2), -1),
+        unique_identifiers=np.arange(num_attempts),
+        parents=np.full((num_attempts, 2), -1),
     )
 
     population = hatch(embryos, projector, projector.descriptor_function, fn)
-    history = History()
+    history = History(record_individuals=record_history)
     history.add_population(population)
-    return population, history
+    return population.dedup().topk(size), history
 
 
 def evolve(

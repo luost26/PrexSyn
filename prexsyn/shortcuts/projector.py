@@ -173,10 +173,10 @@ class MoleculeProjector:
     def desc(self, in_descs: torch.Tensor | np.ndarray) -> _BatchedResult:
         if isinstance(in_descs, torch.Tensor):
             in_descs_np = in_descs.cpu().numpy()
-            in_descs_torch = in_descs
+            in_descs_torch = in_descs.to(device=self.model.device, dtype=self.model.dtype)
         else:
             in_descs_np = in_descs
-            in_descs_torch = torch.from_numpy(in_descs)
+            in_descs_torch = torch.from_numpy(in_descs).to(device=self.model.device, dtype=self.model.dtype)
 
         if in_descs_np.ndim != 2:
             raise ValueError(f"Expected shape (bsz, desc_dim), got {in_descs_np.shape}")
