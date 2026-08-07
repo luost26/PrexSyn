@@ -4,7 +4,6 @@ from pathlib import Path
 import click
 import torch
 
-
 MODEL_PREFIX = "model."
 
 
