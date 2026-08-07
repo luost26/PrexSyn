@@ -4,7 +4,6 @@ from pathlib import Path
 import click
 import torch
 
-
 MODEL_PREFIX = "model."
 
 
@@ -55,4 +54,3 @@ def main(input_path: Path, output_path: Path, force: bool):
 
 if __name__ == "__main__":
     main()
-
