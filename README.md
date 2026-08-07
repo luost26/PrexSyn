@@ -23,9 +23,9 @@ PrexSyn is trained on a billion-scale datastream of postfix notations paired wit
 
 | Capability | Input | Output | Performance |
 | :---: | :---: | :---: | :---: |
-| **Chemical space projection** | ![](docs/imgs/proj-in.png) | ![](docs/imgs/proj-out.png) | ![](docs/imgs/projection-compare.png) |
-| **Fingerprint/descriptor based generation** | ![](docs/imgs/fp-in.png) | ![](docs/imgs/proj-out.png) | ![](docs/imgs/projection-compare.png) |
-| **Molecular sampling** | ![](docs/imgs/sample-in.png) | ![](docs/imgs/sample-out.png) | ![](docs/imgs/sampling-compare-1.png) |
+| **Chemical space projection** | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/proj-in.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/proj-out.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/projection-compare.png) |
+| **Fingerprint/descriptor based generation** | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/fp-in.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/proj-out.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/projection-compare.png) |
+| **Molecular sampling** | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/sample-in.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/sample-out.png) | ![](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/imgs/sampling-compare-1.png) |
 
 
 ## Usage
@@ -46,7 +46,7 @@ uv run python scripts/examples/projection.py \
 
 The diagrams of the synthesis pathways will be saved in the `./draw` directory.
 
-![examples](./docs/getting-started/imgs/projection-example.png)
+![examples](https://raw.githubusercontent.com/luost26/prexsyn/refs/heads/main/docs/getting-started/imgs/projection-example.png)
 
 If you need to customize the environment (e.g., specific PyTorch/CUDA versions), please refer to the [installation instructions](https://prexsyn.readthedocs.io/en/latest/getting-started/installation/) for guidance.
 
