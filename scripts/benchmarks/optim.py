@@ -116,6 +116,13 @@ class BudgetedScoringFunction:
     def exhausted(self) -> bool:
         return self.num_evaluations >= self.max_evals
 
+    @property
+    def saturated(self) -> bool:
+        if self.num_evaluations < 10:
+            return False
+        top10 = heapq.nlargest(10, (item.score for item in self.evaluations))
+        return all(np.isclose(score, 1.0, rtol=0.0, atol=1e-12) for score in top10)
+
     def __call__(self, phenotypes: Sequence[tuple[Synthesis, Molecule]]) -> np.ndarray:
         smiles = [molecule.smiles() for _, molecule in phenotypes]
         unseen: list[str] = []
@@ -178,6 +185,15 @@ def seed_everything(seed: int) -> None:
         torch.cuda.manual_seed_all(seed)
 
 
+def resolve_run_indices(selected_runs: Sequence[int], num_runs: int) -> tuple[int, ...]:
+    run_indices = tuple(selected_runs) or tuple(range(1, num_runs + 1))
+    if len(set(run_indices)) != len(run_indices):
+        raise click.ClickException("Each --run index must be specified at most once.")
+    if any(run_index > num_runs for run_index in run_indices):
+        raise click.ClickException("Every --run index must be less than or equal to --num-runs.")
+    return run_indices
+
+
 def run_optimization(
     projector: MoleculeProjector,
     scoring_function: BudgetedScoringFunction,
@@ -194,6 +210,7 @@ def run_optimization(
         projector=projector,
         fn=scoring_function,
         oversample_factor=1,
+        record_history=False,
     )
     logger.info(
         "generation=0 evals=%d/%d population=%d best=%.4f auc_top10=%.4f",
@@ -206,7 +223,7 @@ def run_optimization(
 
     generation = 1
     stagnant_generations = 0
-    while not scoring_function.exhausted:
+    while not scoring_function.exhausted and not scoring_function.saturated:
         if time_limit is not None and time.monotonic() - start >= time_limit:
             logger.info("Time limit reached after %.1f seconds.", time.monotonic() - start)
             break
@@ -243,6 +260,12 @@ def run_optimization(
             break
         generation += 1
 
+    if scoring_function.saturated and not scoring_function.exhausted:
+        logger.info(
+            "Stopping at %d evaluations because the Top-10 is saturated at the maximum score.",
+            scoring_function.num_evaluations,
+        )
+
     return population, history
 
 
@@ -257,6 +280,16 @@ def read_completed_run(path: pathlib.Path, max_evals: int) -> dict[str, float | 
     }
 
 
+def run_is_complete(path: pathlib.Path, max_evals: int) -> bool:
+    frame = pd.read_csv(path)
+    if len(frame) >= max_evals:
+        return True
+    scores = frame["score"].astype(float).tolist()
+    return len(scores) >= 10 and all(
+        np.isclose(score, 1.0, rtol=0.0, atol=1e-12) for score in heapq.nlargest(10, scores)
+    )
+
+
 def configure_logger(task_dir: pathlib.Path) -> logging.Logger:
     logger = logging.getLogger(f"prexsyn.optim.{task_dir.name}")
     for handler in logger.handlers:
@@ -269,6 +302,58 @@ def configure_logger(task_dir: pathlib.Path) -> logging.Logger:
         handler.setFormatter(formatter)
         logger.addHandler(handler)
     return logger
+
+
+def collect_run_summaries(
+    output_dir: pathlib.Path,
+    tasks: Sequence[str],
+    run_indices: Sequence[int],
+    *,
+    num_runs: int,
+    max_evals: int,
+    seed: int,
+) -> list[dict[str, float | int | str]]:
+    summaries: list[dict[str, float | int | str]] = []
+    for task_name in tasks:
+        task_dir = output_dir / task_name
+        for run_index in run_indices:
+            run_path = task_dir / f"run_{run_index:02d}.csv"
+            if not run_path.exists() or not run_is_complete(run_path, max_evals):
+                raise click.ClickException(f"Cannot summarize missing or incomplete run: {run_path}")
+            summaries.append(
+                {
+                    "task": task_name,
+                    "run": run_index,
+                    "seed": seed + STANDARD_TASKS.index(task_name) * num_runs + run_index - 1,
+                    **read_completed_run(run_path, max_evals),
+                }
+            )
+        pd.DataFrame(item for item in summaries if item["task"] == task_name).to_csv(
+            task_dir / "summary.csv", index=False
+        )
+    return summaries
+
+
+def write_comparison(output_dir: pathlib.Path, run_summaries: Sequence[dict[str, float | int | str]]) -> pd.DataFrame:
+    run_frame = pd.DataFrame(run_summaries)
+    run_frame.to_csv(output_dir / "runs.csv", index=False)
+    comparison = (
+        run_frame.groupby("task", sort=False)
+        .agg(
+            runs=("run", "count"),
+            evaluations_mean=("evaluations", "mean"),
+            auc_top10_mean=("auc_top10", "mean"),
+            auc_top10_std=("auc_top10", lambda values: float(np.std(values, ddof=0))),
+            top10_mean=("top10", "mean"),
+            best_mean=("best", "mean"),
+        )
+        .reset_index()
+    )
+    comparison["paper_auc_top10"] = comparison["task"].map(lambda task: PAPER_AUC_TOP10[str(task)])
+    comparison["paper_auc_top10_std"] = comparison["task"].map(lambda task: PAPER_AUC_TOP10_STD[str(task)])
+    comparison["delta_from_paper"] = comparison["auc_top10_mean"] - comparison["paper_auc_top10"]
+    comparison.to_csv(output_dir / "comparison.csv", index=False)
+    return comparison
 
 
 @click.command()
@@ -290,6 +375,9 @@ def configure_logger(task_dir: pathlib.Path) -> logging.Logger:
 @click.option("--device", default="cuda", show_default=True)
 @click.option("--task", "selected_tasks", multiple=True, type=click.Choice(STANDARD_TASKS))
 @click.option("--num-runs", type=click.IntRange(min=1), default=5, show_default=True)
+@click.option(
+    "--run", "selected_runs", multiple=True, type=click.IntRange(min=1), help="Run only these 1-based seeds."
+)
 @click.option("--max-evals", type=click.IntRange(min=1), default=10_000, show_default=True)
 @click.option("--population-size", type=click.IntRange(min=2), default=500, show_default=True)
 @click.option("--offspring-size", type=click.IntRange(min=2), default=50, show_default=True)
@@ -299,12 +387,16 @@ def configure_logger(task_dir: pathlib.Path) -> logging.Logger:
 @click.option("--seed", type=int, default=2026, show_default=True)
 @click.option("--time-limit", type=click.FloatRange(min=0.0, min_open=True), default=None)
 @click.option("--overwrite", is_flag=True, help="Rerun and replace existing per-run CSV files.")
+@click.option(
+    "--summarize-only", is_flag=True, help="Consolidate existing complete run CSVs without loading the model."
+)
 def main(
     config_path: pathlib.Path,
     output_dir: pathlib.Path,
     device: str,
     selected_tasks: tuple[str, ...],
     num_runs: int,
+    selected_runs: tuple[int, ...],
     max_evals: int,
     population_size: int,
     offspring_size: int,
@@ -314,11 +406,26 @@ def main(
     seed: int,
     time_limit: float | None,
     overwrite: bool,
+    summarize_only: bool,
 ) -> None:
     """Run the standard GuacaMol optimization tasks with the fingerprint GA."""
     torch.set_grad_enabled(False)
     output_dir.mkdir(parents=True, exist_ok=True)
     tasks = selected_tasks or STANDARD_TASKS
+    run_indices = resolve_run_indices(selected_runs, num_runs)
+
+    if summarize_only:
+        run_summaries = collect_run_summaries(
+            output_dir,
+            tasks,
+            run_indices,
+            num_runs=num_runs,
+            max_evals=max_evals,
+            seed=seed,
+        )
+        comparison = write_comparison(output_dir, run_summaries)
+        click.echo(comparison.to_string(index=False, float_format=lambda value: f"{value:.4f}"))
+        return
 
     loader = AllInOneLoader(config_path)
     model = loader.model().to(device).eval()
@@ -335,6 +442,7 @@ def main(
         "device": device,
         "tasks": list(tasks),
         "num_runs": num_runs,
+        "runs": list(run_indices),
         "max_evals": max_evals,
         "population_size": population_size,
         "offspring_size": offspring_size,
@@ -352,11 +460,11 @@ def main(
         task_dir.mkdir(parents=True, exist_ok=True)
         logger = configure_logger(task_dir)
 
-        for run_index in range(1, num_runs + 1):
+        for run_index in run_indices:
             run_path = task_dir / f"run_{run_index:02d}.csv"
             run_seed = seed + STANDARD_TASKS.index(task_name) * num_runs + run_index - 1
             existing_evaluations = len(pd.read_csv(run_path)) if run_path.exists() else 0
-            if run_path.exists() and not overwrite and existing_evaluations >= max_evals:
+            if run_path.exists() and not overwrite and run_is_complete(run_path, max_evals):
                 logger.info("Reusing %s", run_path)
                 metrics = read_completed_run(run_path, max_evals)
             else:
@@ -402,24 +510,7 @@ def main(
             task_dir / "summary.csv", index=False
         )
 
-    run_frame = pd.DataFrame(run_summaries)
-    run_frame.to_csv(output_dir / "runs.csv", index=False)
-    comparison = (
-        run_frame.groupby("task", sort=False)
-        .agg(
-            runs=("run", "count"),
-            evaluations_mean=("evaluations", "mean"),
-            auc_top10_mean=("auc_top10", "mean"),
-            auc_top10_std=("auc_top10", lambda values: float(np.std(values, ddof=0))),
-            top10_mean=("top10", "mean"),
-            best_mean=("best", "mean"),
-        )
-        .reset_index()
-    )
-    comparison["paper_auc_top10"] = comparison["task"].map(lambda task: PAPER_AUC_TOP10[str(task)])
-    comparison["paper_auc_top10_std"] = comparison["task"].map(lambda task: PAPER_AUC_TOP10_STD[str(task)])
-    comparison["delta_from_paper"] = comparison["auc_top10_mean"] - comparison["paper_auc_top10"]
-    comparison.to_csv(output_dir / "comparison.csv", index=False)
+    comparison = write_comparison(output_dir, run_summaries)
     click.echo(comparison.to_string(index=False, float_format=lambda value: f"{value:.4f}"))
 
 

@@ -19,6 +19,9 @@ uv run python scripts/benchmarks/optim.py \
     --task celecoxib_rediscovery
 ```
 
+Independent seeds can be scheduled separately with `--run`; for example, `--num-runs 5 --run 3` writes `run_03.csv` using the same seed as run 3 of the default invocation.
+After all scheduled runs finish, pass `--summarize-only` with the same task and run selection to consolidate their CSVs without loading the model.
+
 The scoring functions come from the `prexsyn-third-party` PyPI package, which bundles GuacaMol. Generated products are cached by canonical SMILES, so repeated molecules do not consume the oracle budget.
 
 ## Outputs and paper comparison

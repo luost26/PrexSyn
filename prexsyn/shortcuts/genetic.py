@@ -155,21 +155,25 @@ class Individual:
 
 
 class History:
-    def __init__(self):
+    def __init__(self, record_individuals: bool = True):
         self.individuals: dict[int, Individual] = {}
         self.max_unique_id = -1
+        self.record_individuals = record_individuals
 
     def add_population(self, population: Population):
         for i in range(population.size()):
+            unique_id = int(population.unique_identifiers[i])
+            self.max_unique_id = max(self.max_unique_id, unique_id)
+            if not self.record_individuals:
+                continue
             individual = Individual(
                 genotype=population.genotypes[i],
                 phenotype=population.phenotypes[i],
                 fitness=float(population.fitnesses[i]),
-                unique_id=int(population.unique_identifiers[i]),
+                unique_id=unique_id,
                 parent_ids=tuple(int(p) for p in population.parents[i]),
             )
             self.individuals[individual.unique_id] = individual
-            self.max_unique_id = max(self.max_unique_id, individual.unique_id)
 
     def next_unique_id(self):
         return self.max_unique_id + 1
@@ -318,6 +322,7 @@ def initialize(
     fn: _FitnessFunction,
     *,
     oversample_factor: int = 2,
+    record_history: bool = True,
 ):
     if size <= 0:
         raise ValueError("size must be positive.")
@@ -335,7 +340,7 @@ def initialize(
     )
 
     population = hatch(embryos, projector, projector.descriptor_function, fn)
-    history = History()
+    history = History(record_individuals=record_history)
     history.add_population(population)
     return population.dedup().topk(size), history
 
