@@ -55,3 +55,4 @@ def main(input_path: Path, output_path: Path, force: bool):
 
 if __name__ == "__main__":
     main()
+
