@@ -2522,7 +2522,7 @@ requires-dist = [
     { name = "omegaconf", specifier = ">=2.3.0" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "pre-commit", marker = "extra == 'dev'" },
-    { name = "prexsyn-engine", specifier = ">=1.1.0,<1.2.0" },
+    { name = "prexsyn-engine", specifier = ">=1.1.1,<1.2.0" },
     { name = "prexsyn-third-party", marker = "extra == 'eval'", specifier = ">=0.1" },
     { name = "psutil", specifier = ">=7.2.2" },
     { name = "pydot", specifier = ">=4.0.1" },
@@ -2543,15 +2543,22 @@ provides-extras = ["eval", "dev"]
 
 [[package]]
 name = "prexsyn-engine"
-version = "1.1.0"
+version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/d7/37/fb6a7a0c9ad432e5528e79acdb6f35aa76b4d7641d06a42980e805cd1df2/prexsyn_engine-1.1.0.tar.gz", hash = "sha256:f1001727171c4d6ddd0f1f025708fa5dc5f1bef8b9562d9f9db018d60bd3dfb5", size = 207775, upload-time = "2026-04-20T18:21:18.623Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/66/4a/543fd38974353be1b38de0616b9c63b37fe896eb9620a92c792ac5f524cf/prexsyn_engine-1.1.1.tar.gz", hash = "sha256:2ee6cc419387c5da778deb520af7749e533dfd8faedcb3b35a0a64400a0ecee8", size = 209997, upload-time = "2026-08-08T01:21:12.66Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0a/2b/e182e3b8fdaebfca54c278aa44eeeec163063eada2d893f9206d607a2594/prexsyn_engine-1.1.0-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:6c420a5b19d907f7c56dd95649bb998114dec5a31238f7b93e63f658c770bd7d", size = 3507377, upload-time = "2026-04-20T18:21:10.331Z" },
-    { url = "https://files.pythonhosted.org/packages/21/96/a23bebc860695032ab5d7547a168fb9969727e6a46fc17822df7050f8852/prexsyn_engine-1.1.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a9c41d282a2f8d35a9bd9c35ca7cbce8c6f23fdce277d04162fdc92341c2eb07", size = 3500405, upload-time = "2026-04-20T18:21:11.906Z" },
-    { url = "https://files.pythonhosted.org/packages/a0/45/bdf3c4dbdd8ab35a7d680be0c5b25eb391a6695058e59ab0dfa6b090a7b1/prexsyn_engine-1.1.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:1fa7f1eeb5130aecdeee073327224e5d4baff83ba9919358d68961b61489e206", size = 3501790, upload-time = "2026-04-20T18:21:13.467Z" },
-    { url = "https://files.pythonhosted.org/packages/f1/48/5292e23805300a362df3cffa9652a1d1e16695a49ac179723b34545b6de4/prexsyn_engine-1.1.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:4d09b618db58c600b2b610e6416eaeb83a3479515dff674d13d7ad6a5151490c", size = 3502132, upload-time = "2026-04-20T18:21:15.469Z" },
-    { url = "https://files.pythonhosted.org/packages/bd/92/26efe38019bc59f1abf9a3f011ee933c44190f0149d5c281e262c1edf01c/prexsyn_engine-1.1.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:f8883aa503cb99ba23a495db2a5735efd90862ef53520f6aafb5345e390f7117", size = 3512362, upload-time = "2026-04-20T18:21:17.085Z" },
+    { url = "https://files.pythonhosted.org/packages/9a/99/c3b0d52ed636a6aa012b39270e2af617cf288e88d87bebedb37e04417682/prexsyn_engine-1.1.1-cp311-cp311-macosx_15_0_arm64.whl", hash = "sha256:2c99f89344620776ad8720f930d1c8f3404dd84985dcdf72ec081d20e8ab2e39", size = 2388354, upload-time = "2026-08-08T01:20:54.685Z" },
+    { url = "https://files.pythonhosted.org/packages/19/d3/cd0f8ffc5e902ace18f58d85f53e2d444c3ea8aed1ee7f73cb5ceab66c0f/prexsyn_engine-1.1.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:26cb5bdd6241e978b93df0ef8d2c8bc294cb463b85a7d8653c02a5674af055a4", size = 3447860, upload-time = "2026-08-08T01:20:56.211Z" },
+    { url = "https://files.pythonhosted.org/packages/e3/cb/910308c4f2cfef7b16cdc19e74c0ecd166360437aab90c9847e869494ea9/prexsyn_engine-1.1.1-cp311-cp311-win_amd64.whl", hash = "sha256:a22af06c758b85e022946f10997a312f83ad36d563dbd31512d6c0c1bbae219c", size = 1527532, upload-time = "2026-08-08T01:20:57.525Z" },
+    { url = "https://files.pythonhosted.org/packages/76/6a/3ca2bd5e530c9ba3e5d59ca442dc339a4178e857cc58e6b2f7baad17223f/prexsyn_engine-1.1.1-cp312-cp312-macosx_15_0_arm64.whl", hash = "sha256:d08764722e67c41f8b5e168b497338ec136fa23239d691f03b8fcc965c46cee5", size = 2393450, upload-time = "2026-08-08T01:20:59.204Z" },
+    { url = "https://files.pythonhosted.org/packages/7d/f0/21924dc63f060c6ce9af84c1a3581af854f9ec01043e69421f2e57ab80ee/prexsyn_engine-1.1.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:d4bf93f132119ef1ee5813540bd8979429f4d1d12d00f3f996f36238732e741c", size = 3453893, upload-time = "2026-08-08T01:21:00.682Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/7b/2d0306bb2bfe0428999d6f6180004c0c82e6d2b9d1f689e1688c148ee644/prexsyn_engine-1.1.1-cp312-cp312-win_amd64.whl", hash = "sha256:8907b39a62692a832987f8b657fa41ae5febb9f662e6df58407f124991ce6855", size = 1534012, upload-time = "2026-08-08T01:21:02.132Z" },
+    { url = "https://files.pythonhosted.org/packages/53/d9/0054909e1f6c72f6f43cb59de8184eacc91c9f2c80d369aa141cfb57e199/prexsyn_engine-1.1.1-cp313-cp313-macosx_15_0_arm64.whl", hash = "sha256:02d57d5b4f4d0a5f38a33bca01966f7bbda7e62cb0983756d382b6830fd04323", size = 2393486, upload-time = "2026-08-08T01:21:03.515Z" },
+    { url = "https://files.pythonhosted.org/packages/e5/62/69bcbdaee67dfd254adfe2a620ad1ff4db5eb9df92ced62c2e00ad673166/prexsyn_engine-1.1.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:782cfaccf005c7b0950984834904858b5e4fdcd3f06239a4a3d35fbc2c793d50", size = 3454202, upload-time = "2026-08-08T01:21:05.238Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/92/d4d508502e28d6be53fe48d1488ff963aba5969ce64c0ff8433f88f0dc2d/prexsyn_engine-1.1.1-cp313-cp313-win_amd64.whl", hash = "sha256:b520783ff5254152758aca80e00d452db8cacb60be6c4476caae579bd98a69f7", size = 1534015, upload-time = "2026-08-08T01:21:06.93Z" },
+    { url = "https://files.pythonhosted.org/packages/cf/6f/5ea3a5eab004a03027235b69a0aeb6ceb36822119154bb055b0941d3e0eb/prexsyn_engine-1.1.1-cp314-cp314-macosx_15_0_arm64.whl", hash = "sha256:f1ace18f8d4f427611309a66cff81417d41583fd764b4c3844ab184867652444", size = 2394436, upload-time = "2026-08-08T01:21:08.447Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/8c/33e8f5ff2b0a4818ab5d34f62765fb9affc6ff30b6fc18d1a12d4d289b51/prexsyn_engine-1.1.1-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:c13e5c3d969f9dda36051c723f47daeee59f0838e2ace007eb13c72eea5f8073", size = 3455264, upload-time = "2026-08-08T01:21:10.013Z" },
+    { url = "https://files.pythonhosted.org/packages/cc/ef/6fa55c8c9cc8036e06ef6af991fedba7ac29b7dca65b5da32c39fdfd4bd2/prexsyn_engine-1.1.1-cp314-cp314-win_amd64.whl", hash = "sha256:8156bd265e9185ee5a13bb6e83a02903c3740cb2f3b3b965231cf1a10aea5ecc", size = 1580043, upload-time = "2026-08-08T01:21:11.495Z" },
 ]
 
 [[package]]

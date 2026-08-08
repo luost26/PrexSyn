@@ -6,7 +6,7 @@ authors = [{ name = "Shitong Luo", email = "luost26@gmail.com" }]
 readme = "README.md"
 license-files = ["LICENSE"]
 dependencies = [
-    "prexsyn-engine>=1.1.0,<1.2.0",
+    "prexsyn-engine>=1.1.1,<1.2.0",
     "torch>=2.0.0",
     "numpy>=2.0.0",
     "click>=8.3.0",
