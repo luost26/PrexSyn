@@ -70,7 +70,7 @@ Install the latest source directly from GitHub:
 python -m pip install "prexsyn @ git+https://github.com/luost26/prexsyn.git"
 ```
 
-Both options install PrexSyn Engine and the other required dependencies automatically. See the [installation instructions](https://prexsyn.readthedocs.io/en/latest/getting-started/installation/) for a source checkout suitable for running the repository examples or contributing to PrexSyn.
+Both options install PrexSyn Engine and the other required dependencies automatically. See the [installation instructions](https://prexsyn.readthedocs.io/en/latest/getting-started/installation/) for more details.
 
 The example below demonstrates how to use PrexSyn to generate synthesis pathways for a target SMILES string:
 
