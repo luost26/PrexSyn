@@ -2,7 +2,23 @@
 
 PrexSyn requires Python 3.11 or newer. The published PrexSyn Engine wheels currently target Linux x86-64; CUDA is recommended for model inference and required by the training script.
 
-## Install for the examples
+## Install from PyPI
+
+For use in your own project, install the latest release from PyPI:
+
+```bash
+python -m pip install prexsyn
+```
+
+PrexSyn Engine and the other required dependencies are installed automatically. Verify the installation:
+
+```bash
+python -c "import prexsyn, prexsyn_engine; print(prexsyn.__version__)"
+```
+
+## Install from source
+
+Clone the repository and use [uv](https://docs.astral.sh/uv/) to create an environment from `pyproject.toml` and `uv.lock`:
 
 ```bash
 git clone https://github.com/luost26/prexsyn.git
@@ -10,21 +26,13 @@ cd prexsyn
 uv sync
 ```
 
-[uv](https://docs.astral.sh/uv/) creates the environment from `pyproject.toml` and `uv.lock`. Verify both packages:
+Verify the source installation:
 
 ```bash
 uv run python -c "import prexsyn, prexsyn_engine; print(prexsyn.__version__)"
 ```
 
 Run commands from the repository root. Shipped configuration files use paths relative to that directory.
-
-## Install in another project
-
-```bash
-python -m pip install "prexsyn @ git+https://github.com/luost26/prexsyn.git"
-```
-
-PrexSyn Engine is installed as a dependency. A PrexSyn release on PyPI is not yet available.
 
 ## Choose a device
 

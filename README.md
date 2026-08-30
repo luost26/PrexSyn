@@ -52,11 +52,25 @@ If you need to customize the environment (e.g., specific PyTorch/CUDA versions),
 
 ### Use PrexSyn in your own project
 
-PrexSyn is designed to be modular and easy to integrate into your own projects. To get started, install PrexSyn directly from this repository (a PyPI release is planned), which will automatically install all required dependencies:
+PrexSyn is designed to be modular and easy to integrate into your own projects.
+
+#### From PyPI
+
+Install the latest release from PyPI:
 
 ```bash
-pip install git+https://github.com/luost26/prexsyn.git
+python -m pip install prexsyn
 ```
+
+#### From source
+
+Install the latest source directly from GitHub:
+
+```bash
+python -m pip install "prexsyn @ git+https://github.com/luost26/prexsyn.git"
+```
+
+Both options install PrexSyn Engine and the other required dependencies automatically. See the [installation instructions](https://prexsyn.readthedocs.io/en/latest/getting-started/installation/) for a source checkout suitable for running the repository examples or contributing to PrexSyn.
 
 The example below demonstrates how to use PrexSyn to generate synthesis pathways for a target SMILES string:
 
