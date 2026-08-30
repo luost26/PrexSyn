@@ -22,7 +22,7 @@ Pass a local path or an HTTP(S) URL to `--config`:
 ```bash
 uv run python scripts/examples/projection.py \
     --config ./data/trained_models/enamine2310_rxn115_202511.yml \
-    --smiles "CCO"
+    --smiles "COc1ccc(-c2ccnc(Nc3ccccc3)n2)cc1"
 ```
 
 For a remote configuration, `AllInOneLoader` first stores the YAML under `data/trained_models/remote/`. It then resolves the checkpoint beside that downloaded YAML and uses the chemical-space path written in the configuration.

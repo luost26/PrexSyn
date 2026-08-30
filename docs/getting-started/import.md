@@ -43,7 +43,10 @@ Products are sorted by descending Tanimoto similarity. `result.best()` returns t
 ## Project a batch
 
 ```python
-batch = projector.many(["CCO", "c1ccccc1"])
+batch = projector.many([
+    "COc1ccc(-c2ccnc(Nc3ccccc3)n2)cc1",
+    "COc1ccc(-c2ccnc(Cl)n2)cc1",
+])
 
 for target_result in batch.results:
     best = target_result.best()
